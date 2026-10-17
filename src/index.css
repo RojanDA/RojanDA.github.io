@@ -1,1 +1,244 @@
 @import "tailwindcss";
+
+@theme {
+  --color-parchment: #f5f0e8;
+  --color-parchment-dark: #e8e0d0;
+  --color-burgundy: #6b1d2e;
+  --color-burgundy-light: #8b2d42;
+  --color-gold: #c9a84c;
+  --color-gold-light: #e0c068;
+  --color-ink: #1a1410;
+  --color-ink-light: #2d2520;
+  --color-sepia: #704214;
+  --color-copper: #b87333;
+  --color-forest: #2d5016;
+  --color-navy: #1a2744;
+  --font-display: 'Playfair Display', serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* Custom cursor */
+.custom-cursor {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-gold);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease, border-color 0.2s ease;
+  mix-blend-mode: difference;
+}
+
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--color-gold);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.05s ease;
+}
+
+.cursor-trail {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+.custom-cursor.hovering {
+  width: 40px;
+  height: 40px;
+  border-color: var(--color-burgundy-light);
+  background: rgba(201, 168, 76, 0.1);
+}
+
+/* Grain texture overlay */
+.grain-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9000;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* 3D Card Effects */
+.card-3d {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.card-3d-inner {
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-style: preserve-3d;
+}
+
+/* Vintage border styles */
+.vintage-border {
+  border: 2px solid var(--color-gold);
+  box-shadow: 
+    inset 0 0 20px rgba(201, 168, 76, 0.1),
+    0 0 0 1px rgba(201, 168, 76, 0.3),
+    0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.vintage-border-double {
+  border: 3px double var(--color-gold);
+  box-shadow: 
+    inset 0 0 30px rgba(201, 168, 76, 0.05),
+    0 0 0 1px rgba(201, 168, 76, 0.2),
+    0 15px 50px rgba(0, 0, 0, 0.4);
+}
+
+/* Retro text effects */
+.retro-text {
+  text-shadow: 
+    2px 2px 0px rgba(201, 168, 76, 0.3),
+    4px 4px 0px rgba(107, 29, 46, 0.2);
+}
+
+.retro-text-shadow {
+  text-shadow: 
+    1px 1px 0px var(--color-burgundy),
+    2px 2px 0px var(--color-burgundy),
+    3px 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Vintage stamp effect */
+.vintage-stamp {
+  border: 3px solid var(--color-burgundy);
+  border-radius: 50%;
+  padding: 15px;
+  transform: rotate(-12deg);
+  opacity: 0.8;
+  position: relative;
+}
+
+.vintage-stamp::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid var(--color-burgundy);
+  border-radius: 50%;
+}
+
+/* Animated underline */
+.retro-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.retro-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-burgundy), var(--color-gold), var(--color-burgundy));
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s ease;
+}
+
+.retro-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-ink);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gold);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold-light);
+}
+
+/* Section divider */
+.section-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-gold), var(--color-burgundy), var(--color-gold), transparent);
+  margin: 0 auto;
+  max-width: 600px;
+}
+
+/* Glowing effect */
+.glow-gold {
+  box-shadow: 0 0 20px rgba(201, 168, 76, 0.3), 0 0 40px rgba(201, 168, 76, 0.1);
+}
+
+/* 3D floating animation */
+@keyframes float3d {
+  0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
+  25% { transform: translateY(-10px) rotateX(2deg) rotateY(-2deg); }
+  50% { transform: translateY(-5px) rotateX(-1deg) rotateY(1deg); }
+  75% { transform: translateY(-15px) rotateX(1deg) rotateY(-1deg); }
+}
+
+.float-3d {
+  animation: float3d 6s ease-in-out infinite;
+}
+
+/* Typewriter effect */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.typewriter-cursor {
+  animation: blink 1s infinite;
+}
+
+/* Parallax layers */
+.parallax-layer {
+  transition: transform 0.1s ease-out;
+}
+
+/* Vintage paper texture */
+.paper-texture {
+  background-color: var(--color-parchment);
+  background-image: 
+    radial-gradient(ellipse at 20% 50%, rgba(201, 168, 76, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(107, 29, 46, 0.03) 0%, transparent 50%),
+    url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' result='noise'/%3E%3CfeDiffuseLighting in='noise' lighting-color='%23f5f0e8' surfaceScale='2'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23paper)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+/* Retro grid background */
+.retro-grid {
+  background-image: 
+    linear-gradient(rgba(201, 168, 76, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 168, 76, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background: var(--color-burgundy);
+  color: var(--color-gold);
+}
