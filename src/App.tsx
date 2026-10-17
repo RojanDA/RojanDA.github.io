@@ -1,8 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform, useInView, AnimatePresence } from 'framer-motion';
-import { BarChart3, Database, TrendingUp, Code, Brain, Shield, ChevronDown, Mail, Github, Linkedin, ExternalLink, Award, Briefcase, GraduationCap, MapPin, Phone } from 'lucide-react';
+import { motion, useScroll, useTransform, useInView, useSpring, AnimatePresence } from 'framer-motion';
+import { BarChart3, Database, TrendingUp, Code, Brain, Shield, ChevronDown, Mail, Github, Linkedin, ExternalLink, Award, Briefcase, GraduationCap, MapPin, Phone, ArrowRight, Sparkles } from 'lucide-react';
 import CustomCursor from './components/CustomCursor';
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
+
+// Scroll Progress Bar
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+
+  return <motion.div className="scroll-progress" style={{ scaleX }} />;
+}
 
 // Navigation Component
 function Navigation() {
@@ -23,7 +31,7 @@ function Navigation() {
       animate={{ y: 0 }}
       transition={{ duration: 0.8, ease: 'easeOut' }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? 'bg-ink/95 backdrop-blur-md shadow-lg shadow-gold/10' : 'bg-transparent'
+        scrolled ? 'bg-ink/95 backdrop-blur-md shadow-lg shadow-gold/5' : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -36,7 +44,6 @@ function Navigation() {
           A.M.
         </motion.a>
 
-        {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item, i) => (
             <motion.a
@@ -53,7 +60,6 @@ function Navigation() {
           ))}
         </div>
 
-        {/* Mobile Menu Button */}
         <button
           className="md:hidden text-gold"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -67,7 +73,6 @@ function Navigation() {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -95,145 +100,189 @@ function Navigation() {
   );
 }
 
-// Hero Section
+// Hero Section with scroll parallax
 function HeroSection() {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, 300]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
   return (
-    <section id="hero" ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-ink">
-      {/* Background elements */}
+    <section id="hero" ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-ink vignette">
       <div className="absolute inset-0 retro-grid opacity-30" />
-      <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink/95 to-ink-light" />
+      <div className="absolute inset-0 bg-gradient-to-b from-ink via-transparent to-ink-light" />
       
-      {/* Floating 3D Elements */}
+      {/* Floating 3D Elements with parallax */}
       <motion.div style={{ y }} className="absolute inset-0 pointer-events-none">
         <motion.div
-          className="absolute top-20 left-10 md:left-20 w-20 h-20 md:w-32 md:h-32 border-2 border-gold/30 rounded-lg"
+          className="absolute top-20 left-10 md:left-20 w-20 h-20 md:w-32 md:h-32 border-2 border-gold/20 rounded-lg"
           animate={{ rotateX: [0, 360], rotateY: [0, 360] }}
           transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
           style={{ transformStyle: 'preserve-3d', perspective: 1000 }}
         />
         <motion.div
-          className="absolute top-40 right-10 md:right-32 w-16 h-16 md:w-24 md:h-24 border-2 border-burgundy/40 rounded-full"
+          className="absolute top-40 right-10 md:right-32 w-16 h-16 md:w-24 md:h-24 border-2 border-burgundy/30 rounded-full"
           animate={{ rotate: [0, 360], scale: [1, 1.1, 1] }}
           transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
         />
         <motion.div
-          className="absolute bottom-32 left-1/4 w-12 h-12 md:w-16 md:h-16 bg-gold/10 border border-gold/20"
+          className="absolute bottom-32 left-1/4 w-12 h-12 md:w-16 md:h-16 bg-gold/5 border border-gold/15"
           animate={{ y: [0, -20, 0], rotate: [0, 45, 0] }}
           transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
-          className="absolute bottom-40 right-1/4 w-8 h-8 md:w-12 md:h-12 bg-burgundy/20 rounded-full"
+          className="absolute bottom-40 right-1/4 w-8 h-8 md:w-12 md:h-12 bg-burgundy/15 rounded-full"
           animate={{ x: [0, 15, 0], y: [0, -10, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        {/* Additional floating elements */}
+        <motion.div
+          className="absolute top-1/3 left-1/3 w-4 h-4 bg-gold/20 rounded-full"
+          animate={{ y: [0, -30, 0], x: [0, 10, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute top-2/3 right-1/3 w-6 h-6 border border-copper/20 rotate-45"
+          animate={{ rotate: [45, 225, 45], scale: [1, 1.2, 1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
         />
       </motion.div>
 
       {/* Main Content */}
-      <motion.div style={{ opacity }} className="relative z-10 text-center px-6 max-w-5xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, ease: 'easeOut' }}
-          className="mb-6"
-        >
-          <span className="font-mono text-gold/70 text-sm md:text-base tracking-[0.3em] uppercase">
-            ── Data Analyst & Visualization Expert ──
-          </span>
-        </motion.div>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.3 }}
-          className="font-display text-5xl md:text-7xl lg:text-8xl font-black text-parchment mb-6 retro-text leading-tight"
-        >
-          Alex
-          <span className="text-gold block md:inline"> Mercer</span>
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.6 }}
-          className="font-body text-parchment/70 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
-        >
-          Transforming complex datasets into compelling narratives. 
-          I bridge the gap between raw data and strategic decisions with 
-          precision analytics and elegant visualizations.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.9 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-        >
-          <a
-            href="#projects"
-            className="px-8 py-3 bg-gold text-ink font-mono font-bold text-sm uppercase tracking-wider hover:bg-gold-light transition-all duration-300 vintage-border glow-gold"
-            data-hover="true"
+      <motion.div style={{ opacity, scale }} className="relative z-10 text-center px-6 max-w-5xl mx-auto">
+        <motion.div style={{ y: textY }}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, ease: 'easeOut' }}
+            className="mb-6"
           >
-            View My Work
-          </a>
-          <a
-            href="#contact"
-            className="px-8 py-3 border-2 border-gold/50 text-gold font-mono font-bold text-sm uppercase tracking-wider hover:border-gold hover:bg-gold/10 transition-all duration-300"
-            data-hover="true"
-          >
-            Get In Touch
-          </a>
-        </motion.div>
+            <span className="font-mono text-gold/70 text-sm md:text-base tracking-[0.3em] uppercase">
+              ── Data Analyst & Visualization Expert ──
+            </span>
+          </motion.div>
 
-        {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 1.2 }}
-          className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto"
-        >
-          {[
-            { number: '50+', label: 'Projects' },
-            { number: '8+', label: 'Years Exp.' },
-            { number: '30+', label: 'Clients' },
-          ].map((stat, i) => (
-            <motion.div
-              key={stat.label}
-              className="text-center"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.4 + i * 0.2 }}
+          <motion.h1
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="font-display text-5xl md:text-7xl lg:text-8xl font-black text-parchment mb-6 retro-text leading-tight"
+          >
+            Alex
+            <span className="text-gold block md:inline"> Mercer</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.6 }}
+            className="font-body text-parchment/70 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
+          >
+            Transforming complex datasets into compelling narratives. 
+            I bridge the gap between raw data and strategic decisions with 
+            precision analytics and elegant visualizations.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.9 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+          >
+            <a
+              href="#projects"
+              className="px-8 py-3 bg-gold text-ink font-mono font-bold text-sm uppercase tracking-wider hover:bg-gold-light transition-all duration-300 vintage-border glow-gold"
+              data-hover="true"
             >
-              <div className="font-display text-2xl md:text-3xl font-bold text-gold">{stat.number}</div>
-              <div className="font-mono text-xs text-parchment/50 uppercase tracking-wider mt-1">{stat.label}</div>
-            </motion.div>
-          ))}
+              View My Work
+            </a>
+            <a
+              href="#contact"
+              className="px-8 py-3 border-2 border-gold/50 text-gold font-mono font-bold text-sm uppercase tracking-wider hover:border-gold hover:bg-gold/10 transition-all duration-300"
+              data-hover="true"
+            >
+              Get In Touch
+            </a>
+          </motion.div>
+
+          {/* Stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 1.2 }}
+            className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto"
+          >
+            {[
+              { number: '50+', label: 'Projects' },
+              { number: '8+', label: 'Years Exp.' },
+              { number: '30+', label: 'Clients' },
+            ].map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                className="text-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.4 + i * 0.2 }}
+              >
+                <div className="font-display text-2xl md:text-3xl font-bold text-gold">{stat.number}</div>
+                <div className="font-mono text-xs text-parchment/50 uppercase tracking-wider mt-1">{stat.label}</div>
+              </motion.div>
+            ))}
+          </motion.div>
         </motion.div>
       </motion.div>
 
       {/* Scroll indicator */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        animate={{ y: [0, 10, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 scroll-pulse"
       >
-        <ChevronDown className="text-gold/50 w-6 h-6" />
+        <div className="flex flex-col items-center gap-2">
+          <span className="font-mono text-xs text-gold/40 uppercase tracking-wider">Scroll</span>
+          <ChevronDown className="text-gold/50 w-5 h-5" />
+        </div>
       </motion.div>
     </section>
   );
 }
 
-// About Section
+// Marquee Ticker Section (scroll-driven)
+function MarqueeSection() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const x = useTransform(scrollYProgress, [0, 1], ['0%', '-50%']);
+
+  const items = ['PYTHON', '●', 'SQL', '●', 'TABLEAU', '●', 'POWER BI', '●', 'R STUDIO', '●', 'TENSORFLOW', '●', 'APACHE SPARK', '●', 'AWS', '●', 'MACHINE LEARNING', '●', 'STATISTICS', '●', 'ETL', '●'];
+
+  return (
+    <section ref={ref} className="relative py-8 bg-ink-mid border-y border-gold/10 overflow-hidden">
+      <motion.div style={{ x }} className="flex whitespace-nowrap">
+        {[...items, ...items].map((item, i) => (
+          <span
+            key={i}
+            className={`font-mono text-sm md:text-base mx-4 md:mx-6 ${
+              item === '●' ? 'text-burgundy' : 'text-gold/60'
+            }`}
+          >
+            {item}
+          </span>
+        ))}
+      </motion.div>
+    </section>
+  );
+}
+
+// About Section with scroll reveal
 function AboutSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const imgY = useTransform(scrollYProgress, [0, 1], [80, -80]);
+  const textY = useTransform(scrollYProgress, [0, 1], [40, -40]);
 
   return (
-    <section id="about" ref={ref} className="relative py-24 md:py-32 bg-ink-light paper-texture">
+    <section id="about" ref={ref} className="relative py-24 md:py-32 bg-ink-light paper-texture overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -249,19 +298,24 @@ function AboutSection() {
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Image/Visual */}
+          {/* Image/Visual with parallax */}
           <motion.div
+            style={{ y: imgY }}
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="card-3d"
           >
-            <div className="relative vintage-border-double p-4 bg-ink/50">
-              <div className="aspect-square bg-gradient-to-br from-burgundy/30 via-ink to-navy/30 rounded-sm flex items-center justify-center overflow-hidden">
+            <div className="relative vintage-border-double p-4 bg-ink/80">
+              <div className="aspect-square bg-gradient-to-br from-burgundy/20 via-ink to-navy/20 rounded-sm flex items-center justify-center overflow-hidden">
                 <div className="text-center p-8">
-                  <div className="w-32 h-32 mx-auto mb-6 rounded-full border-4 border-gold/50 bg-gradient-to-br from-gold/20 to-burgundy/20 flex items-center justify-center">
+                  <motion.div
+                    className="w-32 h-32 mx-auto mb-6 rounded-full border-4 border-gold/50 bg-gradient-to-br from-gold/10 to-burgundy/10 flex items-center justify-center"
+                    animate={{ rotate: [0, 5, -5, 0] }}
+                    transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+                  >
                     <span className="font-display text-5xl font-bold text-gold">AM</span>
-                  </div>
+                  </motion.div>
                   <div className="vintage-stamp mx-auto w-24 h-24 flex items-center justify-center mt-8">
                     <span className="font-mono text-xs text-burgundy font-bold text-center leading-tight">
                       EST.<br/>2016<br/>DATA<br/>ANALYST
@@ -269,7 +323,6 @@ function AboutSection() {
                   </div>
                 </div>
               </div>
-              {/* Corner decorations */}
               <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-gold/50" />
               <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-gold/50" />
               <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-gold/50" />
@@ -277,8 +330,9 @@ function AboutSection() {
             </div>
           </motion.div>
 
-          {/* Text Content */}
+          {/* Text Content with parallax */}
           <motion.div
+            style={{ y: textY }}
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -325,10 +379,37 @@ function AboutSection() {
   );
 }
 
-// Skills Section
+// Scroll-triggered counter component
+function AnimatedCounter({ target, isInView, suffix = '' }: { target: number; isInView: boolean; suffix?: string }) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!isInView) return;
+    let start = 0;
+    const duration = 2000;
+    const increment = target / (duration / 16);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [isInView, target]);
+
+  return <span>{count}{suffix}</span>;
+}
+
+// Skills Section with scroll-driven charts
 function SkillsSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const chartScale = useTransform(scrollYProgress, [0.2, 0.5], [0.8, 1]);
+  const chartOpacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 1]);
 
   const radarData = [
     { skill: 'Python', value: 95 },
@@ -359,8 +440,8 @@ function SkillsSection() {
   ];
 
   return (
-    <section id="skills" ref={ref} className="relative py-24 md:py-32 bg-ink">
-      <div className="absolute inset-0 retro-grid opacity-20" />
+    <section id="skills" ref={ref} className="relative py-24 md:py-32 bg-ink overflow-hidden">
+      <div className="absolute inset-0 retro-grid opacity-15" />
       
       <div className="relative max-w-7xl mx-auto px-6">
         <motion.div
@@ -399,7 +480,7 @@ function SkillsSection() {
                   </div>
                   <span className="font-mono text-xs text-gold">{skill.level}%</span>
                 </div>
-                <div className="h-2 bg-ink-light rounded-full overflow-hidden border border-gold/10">
+                <div className="h-2 bg-ink-mid rounded-full overflow-hidden border border-gold/10">
                   <motion.div
                     className="h-full rounded-full bg-gradient-to-r from-burgundy via-gold to-gold-light"
                     initial={{ width: 0 }}
@@ -411,8 +492,9 @@ function SkillsSection() {
             ))}
           </motion.div>
 
-          {/* Radar Chart */}
+          {/* Radar Chart with scroll-driven scale */}
           <motion.div
+            style={{ scale: chartScale, opacity: chartOpacity }}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -422,7 +504,7 @@ function SkillsSection() {
             <ResponsiveContainer width="100%" height={250}>
               <RadarChart data={radarData}>
                 <PolarGrid stroke="rgba(201, 168, 76, 0.2)" />
-                <PolarAngleAxis dataKey="skill" tick={{ fill: '#f5f0e8', fontSize: 10, fontFamily: 'Space Mono' }} />
+                <PolarAngleAxis dataKey="skill" tick={{ fill: '#e8dcc8', fontSize: 10, fontFamily: 'Space Mono' }} />
                 <PolarRadiusAxis tick={false} axisLine={false} />
                 <Radar name="Skills" dataKey="value" stroke="#c9a84c" fill="#c9a84c" fillOpacity={0.2} strokeWidth={2} />
               </RadarChart>
@@ -450,10 +532,10 @@ function SkillsSection() {
                   <stop offset="95%" stopColor="#6b1d2e" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="year" tick={{ fill: '#f5f0e8', fontSize: 10, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(201, 168, 76, 0.3)' }} />
-              <YAxis tick={{ fill: '#f5f0e8', fontSize: 10, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(201, 168, 76, 0.3)' }} />
+              <XAxis dataKey="year" tick={{ fill: '#e8dcc8', fontSize: 10, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(201, 168, 76, 0.3)' }} />
+              <YAxis tick={{ fill: '#e8dcc8', fontSize: 10, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(201, 168, 76, 0.3)' }} />
               <Tooltip 
-                contentStyle={{ backgroundColor: '#1a1410', border: '1px solid #c9a84c', borderRadius: 0, fontFamily: 'Space Mono', fontSize: 12 }}
+                contentStyle={{ backgroundColor: '#0d0a07', border: '1px solid #c9a84c', borderRadius: 0, fontFamily: 'Space Mono', fontSize: 12 }}
                 labelStyle={{ color: '#c9a84c' }}
               />
               <Area type="monotone" dataKey="projects" stroke="#c9a84c" fill="url(#colorProjects)" strokeWidth={2} />
@@ -476,60 +558,96 @@ function SkillsSection() {
   );
 }
 
-// Projects Section
+// Stats Counter Section (scroll-triggered)
+function StatsSection() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const bgY = useTransform(scrollYProgress, [0, 1], [0, -50]);
+
+  const stats = [
+    { value: 52, suffix: '+', label: 'Projects Completed' },
+    { value: 32, suffix: '+', label: 'Happy Clients' },
+    { value: 8, suffix: '+', label: 'Years Experience' },
+    { value: 99, suffix: '%', label: 'Client Satisfaction' },
+  ];
+
+  return (
+    <section ref={ref} className="relative py-20 bg-ink-mid border-y border-gold/10 overflow-hidden">
+      <motion.div style={{ y: bgY }} className="absolute inset-0 retro-grid opacity-10" />
+      <div className="relative max-w-7xl mx-auto px-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {stats.map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 30, scale: 0.9 }}
+              animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+              transition={{ delay: i * 0.15, duration: 0.6 }}
+              className="text-center p-6 border border-gold/10 bg-ink/50 hover:border-gold/30 transition-all duration-500"
+            >
+              <div className="font-display text-3xl md:text-4xl font-bold text-gold mb-2">
+                <AnimatedCounter target={stat.value} isInView={isInView} suffix={stat.suffix} />
+              </div>
+              <div className="font-mono text-xs text-parchment/50 uppercase tracking-wider">{stat.label}</div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Projects Section with 3D scroll effects
 function ProjectsSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const titleY = useTransform(scrollYProgress, [0, 0.5], [50, -50]);
 
   const projects = [
     {
       title: 'Revenue Forecasting Engine',
       description: 'Built a predictive ML model that improved revenue forecasting accuracy by 34% for a Fortune 500 retail company.',
       tags: ['Python', 'TensorFlow', 'Time Series'],
-      color: 'from-burgundy/40 to-ink',
       metric: '+34% Accuracy',
     },
     {
       title: 'Real-Time Analytics Dashboard',
       description: 'Designed and deployed a real-time analytics platform processing 2M+ events daily with sub-second latency.',
       tags: ['Tableau', 'SQL', 'Apache Kafka'],
-      color: 'from-navy/40 to-ink',
       metric: '2M+ Events/Day',
     },
     {
       title: 'Customer Churn Prediction',
       description: 'Developed a churn prediction system that reduced customer attrition by 22% through early intervention strategies.',
       tags: ['R', 'XGBoost', 'Feature Engineering'],
-      color: 'from-forest/40 to-ink',
       metric: '-22% Churn',
     },
     {
       title: 'Supply Chain Optimization',
       description: 'Created an optimization model that reduced logistics costs by $2.4M annually through route and inventory optimization.',
       tags: ['Python', 'Linear Programming', 'GIS'],
-      color: 'from-sepia/40 to-ink',
       metric: '$2.4M Saved',
     },
     {
       title: 'Healthcare Data Pipeline',
       description: 'Architected a HIPAA-compliant data pipeline processing patient analytics for a network of 50+ hospitals.',
       tags: ['Spark', 'AWS', 'HIPAA'],
-      color: 'from-copper/40 to-ink',
       metric: '50+ Hospitals',
     },
     {
       title: 'Financial Risk Assessment',
       description: 'Built a risk assessment framework using Monte Carlo simulations for a leading investment firm.',
       tags: ['Python', 'Monte Carlo', 'Risk Models'],
-      color: 'from-burgundy/30 to-navy/30',
       metric: '99.5% Confidence',
     },
   ];
 
   return (
-    <section id="projects" ref={ref} className="relative py-24 md:py-32 bg-ink-light paper-texture">
+    <section id="projects" ref={ref} className="relative py-24 md:py-32 bg-ink-light paper-texture overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
+          style={{ y: titleY }}
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
@@ -546,14 +664,15 @@ function ProjectsSection() {
           {projects.map((project, i) => (
             <motion.div
               key={project.title}
-              initial={{ opacity: 0, y: 40, rotateX: 10 }}
-              animate={isInView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.2 + i * 0.1 }}
+              initial={{ opacity: 0, y: 60, rotateX: 15 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 0.7, delay: 0.1 + i * 0.1 }}
+              whileHover={{ y: -8, scale: 1.02 }}
               className="card-3d group"
               data-hover="true"
             >
               <div className="card-3d-inner h-full bg-ink/80 vintage-border p-6 hover:shadow-2xl hover:shadow-gold/10 transition-all duration-500">
-                {/* Metric Badge */}
                 <div className="flex justify-between items-start mb-4">
                   <span className="font-mono text-xs text-gold/50">#{String(i + 1).padStart(2, '0')}</span>
                   <span className="px-2 py-1 bg-gold/10 border border-gold/30 font-mono text-xs text-gold">
@@ -561,17 +680,14 @@ function ProjectsSection() {
                   </span>
                 </div>
 
-                {/* Title */}
                 <h3 className="font-display text-xl font-bold text-parchment mb-3 group-hover:text-gold transition-colors">
                   {project.title}
                 </h3>
 
-                {/* Description */}
                 <p className="font-body text-sm text-parchment/60 mb-4 leading-relaxed">
                   {project.description}
                 </p>
 
-                {/* Tags */}
                 <div className="flex flex-wrap gap-2 mt-auto">
                   {project.tags.map((tag) => (
                     <span key={tag} className="px-2 py-0.5 bg-burgundy/20 border border-burgundy/30 font-mono text-xs text-parchment/70">
@@ -580,7 +696,6 @@ function ProjectsSection() {
                   ))}
                 </div>
 
-                {/* Bottom decoration */}
                 <div className="mt-4 pt-4 border-t border-gold/10 flex justify-between items-center">
                   <span className="font-mono text-xs text-parchment/40">Case Study</span>
                   <ExternalLink className="w-4 h-4 text-gold/50 group-hover:text-gold transition-colors" />
@@ -594,10 +709,12 @@ function ProjectsSection() {
   );
 }
 
-// Experience Section
+// Experience Section with scroll timeline
 function ExperienceSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const lineHeight = useTransform(scrollYProgress, [0.1, 0.8], ['0%', '100%']);
 
   const experiences = [
     {
@@ -634,8 +751,8 @@ function ExperienceSection() {
   ];
 
   return (
-    <section id="experience" ref={ref} className="relative py-24 md:py-32 bg-ink">
-      <div className="absolute inset-0 retro-grid opacity-15" />
+    <section id="experience" ref={ref} className="relative py-24 md:py-32 bg-ink overflow-hidden">
+      <div className="absolute inset-0 retro-grid opacity-10" />
       
       <div className="relative max-w-7xl mx-auto px-6">
         <motion.div
@@ -652,18 +769,31 @@ function ExperienceSection() {
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-12">
-          {/* Timeline */}
-          <div className="space-y-0">
+          {/* Timeline with scroll-driven line */}
+          <div className="relative space-y-0">
+            {/* Animated timeline line */}
+            <div className="absolute left-[7px] top-0 bottom-0 w-0.5 bg-gold/10">
+              <motion.div
+                style={{ height: lineHeight }}
+                className="w-full bg-gradient-to-b from-gold via-gold to-burgundy"
+              />
+            </div>
+
             {experiences.map((exp, i) => (
               <motion.div
                 key={exp.year}
                 initial={{ opacity: 0, x: -30 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: 0.3 + i * 0.15 }}
-                className="relative pl-8 pb-8 border-l-2 border-gold/30 last:border-l-0 last:pb-0 group"
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: '-50px' }}
+                transition={{ delay: 0.2 + i * 0.15, duration: 0.6 }}
+                className="relative pl-8 pb-8 last:pb-0 group"
               >
-                {/* Timeline dot */}
-                <div className="absolute left-[-9px] top-0 w-4 h-4 bg-gold rounded-full border-2 border-ink group-hover:scale-150 transition-transform" />
+                <motion.div
+                  className="absolute left-[-5px] top-0 w-3 h-3 bg-gold rounded-full border-2 border-ink"
+                  whileInView={{ scale: [0, 1.5, 1] }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 + i * 0.15, duration: 0.4 }}
+                />
                 
                 <div className="bg-ink-light/50 border border-gold/10 p-5 hover:border-gold/30 transition-all duration-300">
                   <span className="font-mono text-xs text-gold/70">{exp.year}</span>
@@ -678,8 +808,9 @@ function ExperienceSection() {
           {/* Certifications */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: 0.5 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5, duration: 0.8 }}
           >
             <div className="vintage-border-double p-8 bg-ink/80 h-full">
               <h3 className="font-display text-xl font-bold text-gold mb-6 flex items-center gap-3">
@@ -691,7 +822,8 @@ function ExperienceSection() {
                   <motion.div
                     key={cert}
                     initial={{ opacity: 0, y: 20 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
                     transition={{ delay: 0.7 + i * 0.1 }}
                     className="flex items-start gap-3 p-3 bg-ink-light/50 border border-gold/10 hover:border-gold/30 transition-colors"
                   >
@@ -701,7 +833,6 @@ function ExperienceSection() {
                 ))}
               </div>
 
-              {/* Bar chart for tool proficiency */}
               <div className="mt-8">
                 <h4 className="font-mono text-xs text-gold/60 uppercase tracking-wider mb-4">Tool Proficiency</h4>
                 <ResponsiveContainer width="100%" height={150}>
@@ -712,9 +843,9 @@ function ExperienceSection() {
                     { tool: 'R', score: 85 },
                     { tool: 'Spark', score: 78 },
                   ]}>
-                    <XAxis dataKey="tool" tick={{ fill: '#f5f0e8', fontSize: 9, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(201, 168, 76, 0.3)' }} />
-                    <YAxis tick={{ fill: '#f5f0e8', fontSize: 9, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(201, 168, 76, 0.3)' }} />
-                    <Tooltip contentStyle={{ backgroundColor: '#1a1410', border: '1px solid #c9a84c', borderRadius: 0, fontFamily: 'Space Mono', fontSize: 11 }} />
+                    <XAxis dataKey="tool" tick={{ fill: '#e8dcc8', fontSize: 9, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(201, 168, 76, 0.3)' }} />
+                    <YAxis tick={{ fill: '#e8dcc8', fontSize: 9, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(201, 168, 76, 0.3)' }} />
+                    <Tooltip contentStyle={{ backgroundColor: '#0d0a07', border: '1px solid #c9a84c', borderRadius: 0, fontFamily: 'Space Mono', fontSize: 11 }} />
                     <Bar dataKey="score" fill="#c9a84c" radius={[2, 2, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
@@ -727,13 +858,36 @@ function ExperienceSection() {
   );
 }
 
+// Parallax Quote Section
+function QuoteSection() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.9, 1, 0.9]);
+
+  return (
+    <section ref={ref} className="relative py-32 bg-ink-mid overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink-mid to-ink" />
+      <motion.div style={{ y, opacity, scale }} className="relative max-w-4xl mx-auto px-6 text-center">
+        <Sparkles className="w-8 h-8 text-gold/50 mx-auto mb-6" />
+        <blockquote className="font-display text-2xl md:text-4xl text-parchment/90 italic leading-relaxed retro-text">
+          "Data without analysis is just noise. Analysis without visualization is just numbers. 
+          But together, they tell stories that change the world."
+        </blockquote>
+        <div className="mt-8 font-mono text-sm text-gold/60">— Alex Mercer</div>
+      </motion.div>
+    </section>
+  );
+}
+
 // Contact Section
 function ContactSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
-    <section id="contact" ref={ref} className="relative py-24 md:py-32 bg-ink-light paper-texture">
+    <section id="contact" ref={ref} className="relative py-24 md:py-32 bg-ink-light paper-texture overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -749,7 +903,6 @@ function ContactSection() {
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-          {/* Contact Info */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -772,6 +925,7 @@ function ContactSection() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.5 + i * 0.1 }}
+                  whileHover={{ x: 5 }}
                   className="flex items-center gap-4 p-4 bg-ink/50 border border-gold/10 hover:border-gold/30 transition-colors"
                 >
                   <item.icon className="w-5 h-5 text-gold flex-shrink-0" />
@@ -783,7 +937,6 @@ function ContactSection() {
               ))}
             </div>
 
-            {/* Social Links */}
             <div className="flex gap-4 pt-4">
               {[
                 { icon: Github, label: 'GitHub' },
@@ -803,7 +956,6 @@ function ContactSection() {
             </div>
           </motion.div>
 
-          {/* Contact Form */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -814,7 +966,7 @@ function ContactSection() {
                 <label className="font-mono text-xs text-gold/70 uppercase tracking-wider block mb-2">Name</label>
                 <input
                   type="text"
-                  className="w-full bg-ink-light/50 border border-gold/20 px-4 py-3 text-parchment font-body text-sm focus:border-gold focus:outline-none transition-colors"
+                  className="w-full bg-ink-mid/80 border border-gold/20 px-4 py-3 text-parchment font-body text-sm focus:border-gold focus:outline-none transition-colors placeholder:text-parchment/30"
                   placeholder="Your Name"
                 />
               </div>
@@ -822,7 +974,7 @@ function ContactSection() {
                 <label className="font-mono text-xs text-gold/70 uppercase tracking-wider block mb-2">Email</label>
                 <input
                   type="email"
-                  className="w-full bg-ink-light/50 border border-gold/20 px-4 py-3 text-parchment font-body text-sm focus:border-gold focus:outline-none transition-colors"
+                  className="w-full bg-ink-mid/80 border border-gold/20 px-4 py-3 text-parchment font-body text-sm focus:border-gold focus:outline-none transition-colors placeholder:text-parchment/30"
                   placeholder="your@email.com"
                 />
               </div>
@@ -830,18 +982,18 @@ function ContactSection() {
                 <label className="font-mono text-xs text-gold/70 uppercase tracking-wider block mb-2">Message</label>
                 <textarea
                   rows={4}
-                  className="w-full bg-ink-light/50 border border-gold/20 px-4 py-3 text-parchment font-body text-sm focus:border-gold focus:outline-none transition-colors resize-none"
+                  className="w-full bg-ink-mid/80 border border-gold/20 px-4 py-3 text-parchment font-body text-sm focus:border-gold focus:outline-none transition-colors resize-none placeholder:text-parchment/30"
                   placeholder="Tell me about your project..."
                 />
               </div>
               <motion.button
                 type="submit"
-                className="w-full py-3 bg-gold text-ink font-mono font-bold text-sm uppercase tracking-wider hover:bg-gold-light transition-all duration-300 glow-gold"
+                className="w-full py-3 bg-gold text-ink font-mono font-bold text-sm uppercase tracking-wider hover:bg-gold-light transition-all duration-300 glow-gold flex items-center justify-center gap-2"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 data-hover="true"
               >
-                Send Message →
+                Send Message <ArrowRight className="w-4 h-4" />
               </motion.button>
             </form>
           </motion.div>
@@ -853,18 +1005,22 @@ function ContactSection() {
 
 // Footer
 function Footer() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end end'] });
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [0.5, 1]);
+
   return (
-    <footer className="bg-ink border-t border-gold/10 py-8">
-      <div className="max-w-7xl mx-auto px-6 text-center">
-        <div className="font-display text-xl text-gold mb-2">A.M.</div>
-        <p className="font-mono text-xs text-parchment/40">
+    <footer ref={ref} className="relative bg-ink border-t border-gold/10 py-12">
+      <motion.div style={{ opacity }} className="max-w-7xl mx-auto px-6 text-center">
+        <div className="font-display text-2xl text-gold mb-2 retro-text">A.M.</div>
+        <p className="font-mono text-xs text-parchment/40 mb-4">
           © 2024 Alex Mercer. Crafted with precision & passion.
         </p>
-        <div className="section-divider mt-4 mb-4" />
-        <p className="font-mono text-xs text-parchment/30">
+        <div className="section-divider mb-4" />
+        <p className="font-mono text-xs text-parchment/30 italic">
           "In data we trust, in insights we believe."
         </p>
-      </div>
+      </motion.div>
     </footer>
   );
 }
@@ -874,12 +1030,16 @@ export default function App() {
   return (
     <div className="bg-ink min-h-screen overflow-x-hidden">
       <CustomCursor />
+      <ScrollProgress />
       <div className="grain-overlay" />
       <Navigation />
       <HeroSection />
+      <MarqueeSection />
       <AboutSection />
       <SkillsSection />
+      <StatsSection />
       <ProjectsSection />
+      <QuoteSection />
       <ExperienceSection />
       <ContactSection />
       <Footer />

@@ -1,18 +1,19 @@
 @import "tailwindcss";
 
 @theme {
-  --color-parchment: #f5f0e8;
-  --color-parchment-dark: #e8e0d0;
+  --color-parchment: #e8dcc8;
+  --color-parchment-dark: #d4c4a8;
   --color-burgundy: #6b1d2e;
   --color-burgundy-light: #8b2d42;
   --color-gold: #c9a84c;
   --color-gold-light: #e0c068;
-  --color-ink: #1a1410;
-  --color-ink-light: #2d2520;
+  --color-ink: #0d0a07;
+  --color-ink-light: #1a1510;
+  --color-ink-mid: #252018;
   --color-sepia: #704214;
   --color-copper: #b87333;
-  --color-forest: #2d5016;
-  --color-navy: #1a2744;
+  --color-forest: #1a3010;
+  --color-navy: #0f1a2e;
   --font-display: 'Playfair Display', serif;
   --font-mono: 'Space Mono', monospace;
   --font-body: 'Inter', sans-serif;
@@ -69,8 +70,20 @@
   height: 100%;
   pointer-events: none;
   z-index: 9000;
-  opacity: 0.04;
+  opacity: 0.03;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* Scroll Progress Bar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-burgundy), var(--color-gold), var(--color-copper));
+  z-index: 9999;
+  transform-origin: left;
+  box-shadow: 0 0 10px var(--color-gold), 0 0 20px rgba(201, 168, 76, 0.3);
 }
 
 /* 3D Card Effects */
@@ -88,31 +101,31 @@
 .vintage-border {
   border: 2px solid var(--color-gold);
   box-shadow: 
-    inset 0 0 20px rgba(201, 168, 76, 0.1),
-    0 0 0 1px rgba(201, 168, 76, 0.3),
-    0 10px 40px rgba(0, 0, 0, 0.3);
+    inset 0 0 20px rgba(201, 168, 76, 0.05),
+    0 0 0 1px rgba(201, 168, 76, 0.2),
+    0 10px 40px rgba(0, 0, 0, 0.5);
 }
 
 .vintage-border-double {
   border: 3px double var(--color-gold);
   box-shadow: 
-    inset 0 0 30px rgba(201, 168, 76, 0.05),
-    0 0 0 1px rgba(201, 168, 76, 0.2),
-    0 15px 50px rgba(0, 0, 0, 0.4);
+    inset 0 0 30px rgba(201, 168, 76, 0.03),
+    0 0 0 1px rgba(201, 168, 76, 0.15),
+    0 15px 50px rgba(0, 0, 0, 0.6);
 }
 
 /* Retro text effects */
 .retro-text {
   text-shadow: 
-    2px 2px 0px rgba(201, 168, 76, 0.3),
-    4px 4px 0px rgba(107, 29, 46, 0.2);
+    2px 2px 0px rgba(201, 168, 76, 0.2),
+    4px 4px 0px rgba(107, 29, 46, 0.15);
 }
 
 .retro-text-shadow {
   text-shadow: 
     1px 1px 0px var(--color-burgundy),
     2px 2px 0px var(--color-burgundy),
-    3px 3px 10px rgba(0, 0, 0, 0.3);
+    3px 3px 10px rgba(0, 0, 0, 0.5);
 }
 
 /* Vintage stamp effect */
@@ -215,20 +228,20 @@
   transition: transform 0.1s ease-out;
 }
 
-/* Vintage paper texture */
+/* Dark vintage paper texture - NO white/light backgrounds */
 .paper-texture {
-  background-color: var(--color-parchment);
+  background-color: var(--color-ink-light);
   background-image: 
-    radial-gradient(ellipse at 20% 50%, rgba(201, 168, 76, 0.05) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(107, 29, 46, 0.03) 0%, transparent 50%),
-    url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' result='noise'/%3E%3CfeDiffuseLighting in='noise' lighting-color='%23f5f0e8' surfaceScale='2'%3E%3CfeDistantLight azimuth='45' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23paper)' opacity='0.03'/%3E%3C/svg%3E");
+    radial-gradient(ellipse at 20% 50%, rgba(201, 168, 76, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(107, 29, 46, 0.02) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(184, 115, 51, 0.02) 0%, transparent 40%);
 }
 
 /* Retro grid background */
 .retro-grid {
   background-image: 
-    linear-gradient(rgba(201, 168, 76, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(201, 168, 76, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(201, 168, 76, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 168, 76, 0.04) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
@@ -242,3 +255,160 @@ html {
   background: var(--color-burgundy);
   color: var(--color-gold);
 }
+
+/* Scroll reveal animations */
+@keyframes scrollRevealUp {
+  from {
+    opacity: 0;
+    transform: translateY(60px) scale(0.95);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes scrollRevealLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-80px) rotate(-2deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(0);
+  }
+}
+
+@keyframes scrollRevealRight {
+  from {
+    opacity: 0;
+    transform: translateX(80px) rotate(2deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(0);
+  }
+}
+
+@keyframes scrollRevealScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8) rotateX(10deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotateX(0);
+  }
+}
+
+/* Scroll-driven text reveal */
+.text-reveal-line {
+  overflow: hidden;
+}
+
+.text-reveal-line > span {
+  display: inline-block;
+  transform: translateY(100%);
+  transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.text-reveal-line.revealed > span {
+  transform: translateY(0);
+}
+
+/* Horizontal scroll section */
+.horizontal-scroll-container {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.horizontal-scroll-item {
+  scroll-snap-align: start;
+}
+
+/* Scroll-triggered counter animation */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Marquee effect for scroll */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee {
+  animation: marquee 30s linear infinite;
+}
+
+.marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Sticky section scroll effect */
+.sticky-section {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+/* Scroll zoom effect */
+@keyframes scrollZoom {
+  from { transform: scale(1.2); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Vintage vignette effect */
+.vignette::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.4) 100%);
+  pointer-events: none;
+}
+
+/* Scroll indicator pulse */
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.4; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(8px); }
+}
+
+.scroll-pulse {
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+/* Section transition overlay */
+.section-fade {
+  mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+}
+
+/* Rotating border animation */
+@keyframes rotateBorder {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.rotating-border {
+  position: relative;
+}
+
+.rotating-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: conic-gradient(from 0deg, var(--color-gold), var(--color-burgundy), var(--color-copper), var(--color-gold));
+  border-radius: inherit;
+  animation: rotateBorder 8s linear infinite;
+  z-index: -1;
+  opacity: 0.5;
+}
+
+/* Depth layers for parallax */
+.depth-1 { transform: translateZ(-1px) scale(1.1); }
+.depth-2 { transform: translateZ(-2px) scale(1.2); }
+.depth-3 { transform: translateZ(-3px) scale(1.3); }
