@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useInView, useSpring, AnimatePresence } from 'framer-motion';
-import { BarChart3, Database, TrendingUp, Code, Brain, Shield, ChevronDown, Mail, Github, Linkedin, ExternalLink, Award, Briefcase, GraduationCap, MapPin, Phone, ArrowRight, Sparkles } from 'lucide-react';
+import { BarChart3, Database, TrendingUp, Code, Brain, Shield, ChevronDown, Mail, Github, Linkedin, ExternalLink, Award, Briefcase, GraduationCap, MapPin, Phone, ArrowRight, Sparkles, Download, BookOpen, Cloud, Globe, FileSpreadsheet, Server } from 'lucide-react';
 import CustomCursor from './components/CustomCursor';
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
 
@@ -109,6 +109,62 @@ function HeroSection() {
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
+  const handleDownloadCV = () => {
+    // Create a sample CV content
+    const cvContent = `
+ALEX MERCER
+Data Analyst | Python | SQL | Power BI
+
+CONTACT
+Email: alex.mercer@email.com
+Phone: +1 (415) 555-0142
+Location: San Francisco, CA
+
+SUMMARY
+Aspiring Data Analyst with strong foundation in Python, SQL, and data visualization tools. 
+Passionate about transforming raw data into actionable insights through hands-on personal projects.
+
+SKILLS
+• Programming: Python, SQL
+• Data Analysis: Pandas, NumPy, Web Scraping
+• Visualization: Power BI, Excel
+• Cloud: AWS, Azure
+• Tools: Jupyter, Git
+
+PROJECTS
+1. Sales Data Analysis Dashboard
+   - Built interactive Power BI dashboard analyzing 10K+ sales records
+   - Implemented data cleaning and transformation using Python
+
+2. Weather Data Web Scraper
+   - Developed Python scraper to collect weather data from multiple sources
+   - Automated data collection and storage in structured format
+
+3. Customer Segmentation Analysis
+   - Applied clustering algorithms to segment customers based on purchase behavior
+   - Created visualizations to identify key customer groups
+
+EDUCATION
+Bachelor of Science in Computer Science
+University Name | 2020 - 2024
+
+CERTIFICATIONS
+• Google Data Analytics Certificate
+• AWS Cloud Practitioner
+• Microsoft Power BI Certification
+    `;
+
+    const blob = new Blob([cvContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Alex_Mercer_CV.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <section id="hero" ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-ink vignette">
       <div className="absolute inset-0 retro-grid opacity-30" />
@@ -160,7 +216,7 @@ function HeroSection() {
             className="mb-6"
           >
             <span className="font-mono text-gold/70 text-sm md:text-base tracking-[0.3em] uppercase">
-              ── Data Analyst & Visualization Expert ──
+              ── Aspiring Data Analyst ──
             </span>
           </motion.div>
 
@@ -180,9 +236,8 @@ function HeroSection() {
             transition={{ duration: 1, delay: 0.6 }}
             className="font-body text-parchment/70 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            Transforming complex datasets into compelling narratives. 
-            I bridge the gap between raw data and strategic decisions with 
-            precision analytics and elegant visualizations.
+            Passionate data enthusiast building expertise in Python, SQL, and data visualization. 
+            Transforming personal projects into powerful insights and ready to launch a career in data analytics.
           </motion.p>
 
           <motion.div
@@ -196,15 +251,16 @@ function HeroSection() {
               className="px-8 py-3 bg-gold text-ink font-mono font-bold text-sm uppercase tracking-wider hover:bg-gold-light transition-all duration-300 vintage-border glow-gold"
               data-hover="true"
             >
-              View My Work
+              View My Projects
             </a>
-            <a
-              href="#contact"
-              className="px-8 py-3 border-2 border-gold/50 text-gold font-mono font-bold text-sm uppercase tracking-wider hover:border-gold hover:bg-gold/10 transition-all duration-300"
+            <button
+              onClick={handleDownloadCV}
+              className="px-8 py-3 border-2 border-gold/50 text-gold font-mono font-bold text-sm uppercase tracking-wider hover:border-gold hover:bg-gold/10 transition-all duration-300 flex items-center gap-2"
               data-hover="true"
             >
-              Get In Touch
-            </a>
+              <Download className="w-4 h-4" />
+              Download CV
+            </button>
           </motion.div>
 
           {/* Stats */}
@@ -215,9 +271,9 @@ function HeroSection() {
             className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto"
           >
             {[
-              { number: '50+', label: 'Projects' },
-              { number: '8+', label: 'Years Exp.' },
-              { number: '30+', label: 'Clients' },
+              { number: '10+', label: 'Projects' },
+              { number: '8+', label: 'Skills' },
+              { number: '5+', label: 'Certifications' },
             ].map((stat, i) => (
               <motion.div
                 key={stat.label}
@@ -253,7 +309,7 @@ function MarqueeSection() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const x = useTransform(scrollYProgress, [0, 1], ['0%', '-50%']);
 
-  const items = ['PYTHON', '●', 'SQL', '●', 'TABLEAU', '●', 'POWER BI', '●', 'R STUDIO', '●', 'TENSORFLOW', '●', 'APACHE SPARK', '●', 'AWS', '●', 'MACHINE LEARNING', '●', 'STATISTICS', '●', 'ETL', '●'];
+  const items = ['PYTHON', '●', 'SQL', '●', 'POWER BI', '●', 'EXCEL', '●', 'AWS', '●', 'AZURE', '●', 'PANDAS', '●', 'WEB SCRAPING', '●', 'DATA ANALYSIS', '●', 'DATA VISUALIZATION', '●', 'ETL', '●'];
 
   return (
     <section ref={ref} className="relative py-8 bg-ink-mid border-y border-gold/10 overflow-hidden">
@@ -318,7 +374,7 @@ function AboutSection() {
                   </motion.div>
                   <div className="vintage-stamp mx-auto w-24 h-24 flex items-center justify-center mt-8">
                     <span className="font-mono text-xs text-burgundy font-bold text-center leading-tight">
-                      EST.<br/>2016<br/>DATA<br/>ANALYST
+                      EST.<br/>2024<br/>DATA<br/>ANALYST
                     </span>
                   </div>
                 </div>
@@ -339,26 +395,27 @@ function AboutSection() {
             className="space-y-6"
           >
             <p className="font-body text-parchment/80 text-lg leading-relaxed">
-              With over <span className="text-gold font-semibold">8 years of experience</span> in data analytics, 
-              I specialize in transforming complex datasets into actionable business intelligence. 
-              My approach combines statistical rigor with creative visualization.
+              A passionate <span className="text-gold font-semibold">aspiring Data Analyst</span> with hands-on 
+              experience through personal projects. I've built a strong foundation in Python, SQL, 
+              and data visualization tools like Power BI and Excel.
             </p>
             <p className="font-body text-parchment/70 leading-relaxed">
-              From Fortune 500 companies to innovative startups, I've helped organizations 
-              unlock the power of their data. My expertise spans predictive modeling, 
-              data engineering, and executive-level reporting.
+              Through self-directed learning and real-world projects, I've developed skills in 
+              web scraping, cloud platforms (AWS & Azure), and data manipulation with Pandas. 
+              Every project is an opportunity to solve problems and uncover insights.
             </p>
             <p className="font-body text-parchment/70 leading-relaxed">
-              I believe that every dataset tells a story — my job is to find it, 
-              refine it, and present it in a way that drives meaningful decisions.
+              I'm eager to bring my analytical mindset, technical skills, and enthusiasm 
+              for data to a professional team where I can continue growing and contributing 
+              meaningful insights.
             </p>
             
             <div className="grid grid-cols-2 gap-4 pt-4">
               {[
                 { icon: MapPin, text: 'San Francisco, CA' },
-                { icon: Briefcase, text: 'Open to Work' },
-                { icon: GraduationCap, text: 'M.S. Statistics' },
-                { icon: Award, text: 'Top 1% Analyst' },
+                { icon: Briefcase, text: 'Seeking Opportunities' },
+                { icon: GraduationCap, text: 'B.S. Computer Science' },
+                { icon: Award, text: 'Quick Learner' },
               ].map((item, i) => (
                 <motion.div
                   key={item.text}
@@ -412,31 +469,33 @@ function SkillsSection() {
   const chartOpacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 1]);
 
   const radarData = [
-    { skill: 'Python', value: 95 },
-    { skill: 'SQL', value: 92 },
-    { skill: 'Tableau', value: 88 },
-    { skill: 'R', value: 85 },
-    { skill: 'ML/AI', value: 80 },
-    { skill: 'Excel', value: 98 },
+    { skill: 'Python', value: 85 },
+    { skill: 'SQL', value: 88 },
+    { skill: 'Power BI', value: 82 },
+    { skill: 'Excel', value: 90 },
+    { skill: 'AWS', value: 70 },
+    { skill: 'Azure', value: 68 },
   ];
 
-  const growthData = [
-    { year: '2018', projects: 8, clients: 3 },
-    { year: '2019', projects: 15, clients: 7 },
-    { year: '2020', projects: 22, clients: 12 },
-    { year: '2021', projects: 30, clients: 18 },
-    { year: '2022', projects: 38, clients: 22 },
-    { year: '2023', projects: 45, clients: 28 },
-    { year: '2024', projects: 52, clients: 32 },
+  const learningData = [
+    { month: 'Jan', hours: 20, projects: 1 },
+    { month: 'Feb', hours: 35, projects: 1 },
+    { month: 'Mar', hours: 45, projects: 2 },
+    { month: 'Apr', hours: 60, projects: 2 },
+    { month: 'May', hours: 80, projects: 3 },
+    { month: 'Jun', hours: 95, projects: 3 },
+    { month: 'Jul', hours: 110, projects: 4 },
   ];
 
   const skills = [
-    { name: 'Python & Pandas', level: 95, icon: Code },
-    { name: 'SQL & Databases', level: 92, icon: Database },
-    { name: 'Data Visualization', level: 90, icon: BarChart3 },
-    { name: 'Machine Learning', level: 82, icon: Brain },
-    { name: 'Statistical Analysis', level: 88, icon: TrendingUp },
-    { name: 'Data Security', level: 85, icon: Shield },
+    { name: 'Python & Pandas', level: 85, icon: Code },
+    { name: 'SQL & Databases', level: 88, icon: Database },
+    { name: 'Power BI', level: 82, icon: BarChart3 },
+    { name: 'Excel & Data Analysis', level: 90, icon: FileSpreadsheet },
+    { name: 'Web Scraping', level: 78, icon: Globe },
+    { name: 'AWS Cloud', level: 70, icon: Cloud },
+    { name: 'Azure Cloud', level: 68, icon: Server },
+    { name: 'Data Visualization', level: 85, icon: TrendingUp },
   ];
 
   return (
@@ -512,44 +571,44 @@ function SkillsSection() {
           </motion.div>
         </div>
 
-        {/* Growth Chart */}
+        {/* Learning Journey Chart */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.6 }}
           className="mt-12 vintage-border p-6 bg-ink/80"
         >
-          <h3 className="font-display text-lg text-gold text-center mb-6">Growth Trajectory</h3>
+          <h3 className="font-display text-lg text-gold text-center mb-6">Learning Journey</h3>
           <ResponsiveContainer width="100%" height={200}>
-            <AreaChart data={growthData}>
+            <AreaChart data={learningData}>
               <defs>
-                <linearGradient id="colorProjects" x1="0" y1="0" x2="0" y2="1">
+                <linearGradient id="colorHours" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#c9a84c" stopOpacity={0.3} />
                   <stop offset="95%" stopColor="#c9a84c" stopOpacity={0} />
                 </linearGradient>
-                <linearGradient id="colorClients" x1="0" y1="0" x2="0" y2="1">
+                <linearGradient id="colorProjectsChart" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#6b1d2e" stopOpacity={0.3} />
                   <stop offset="95%" stopColor="#6b1d2e" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="year" tick={{ fill: '#e8dcc8', fontSize: 10, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(201, 168, 76, 0.3)' }} />
+              <XAxis dataKey="month" tick={{ fill: '#e8dcc8', fontSize: 10, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(201, 168, 76, 0.3)' }} />
               <YAxis tick={{ fill: '#e8dcc8', fontSize: 10, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(201, 168, 76, 0.3)' }} />
               <Tooltip 
                 contentStyle={{ backgroundColor: '#0d0a07', border: '1px solid #c9a84c', borderRadius: 0, fontFamily: 'Space Mono', fontSize: 12 }}
                 labelStyle={{ color: '#c9a84c' }}
               />
-              <Area type="monotone" dataKey="projects" stroke="#c9a84c" fill="url(#colorProjects)" strokeWidth={2} />
-              <Area type="monotone" dataKey="clients" stroke="#6b1d2e" fill="url(#colorClients)" strokeWidth={2} />
+              <Area type="monotone" dataKey="hours" stroke="#c9a84c" fill="url(#colorHours)" strokeWidth={2} name="Learning Hours" />
+              <Area type="monotone" dataKey="projects" stroke="#6b1d2e" fill="url(#colorProjectsChart)" strokeWidth={2} name="Projects" />
             </AreaChart>
           </ResponsiveContainer>
           <div className="flex justify-center gap-8 mt-4">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-gold rounded-full" />
-              <span className="font-mono text-xs text-parchment/60">Projects</span>
+              <span className="font-mono text-xs text-parchment/60">Learning Hours</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-burgundy rounded-full" />
-              <span className="font-mono text-xs text-parchment/60">Clients</span>
+              <span className="font-mono text-xs text-parchment/60">Projects Built</span>
             </div>
           </div>
         </motion.div>
@@ -566,10 +625,10 @@ function StatsSection() {
   const bgY = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
   const stats = [
-    { value: 52, suffix: '+', label: 'Projects Completed' },
-    { value: 32, suffix: '+', label: 'Happy Clients' },
-    { value: 8, suffix: '+', label: 'Years Experience' },
-    { value: 99, suffix: '%', label: 'Client Satisfaction' },
+    { value: 10, suffix: '+', label: 'Personal Projects' },
+    { value: 8, suffix: '+', label: 'Technical Skills' },
+    { value: 500, suffix: '+', label: 'Learning Hours' },
+    { value: 5, suffix: '+', label: 'Certifications' },
   ];
 
   return (
@@ -606,40 +665,40 @@ function ProjectsSection() {
 
   const projects = [
     {
-      title: 'Revenue Forecasting Engine',
-      description: 'Built a predictive ML model that improved revenue forecasting accuracy by 34% for a Fortune 500 retail company.',
-      tags: ['Python', 'TensorFlow', 'Time Series'],
-      metric: '+34% Accuracy',
+      title: 'Sales Dashboard with Power BI',
+      description: 'Built an interactive dashboard analyzing 10K+ sales records with dynamic filters, KPIs, and trend analysis. Implemented data modeling and DAX calculations.',
+      tags: ['Power BI', 'DAX', 'Data Modeling'],
+      metric: '10K+ Records',
     },
     {
-      title: 'Real-Time Analytics Dashboard',
-      description: 'Designed and deployed a real-time analytics platform processing 2M+ events daily with sub-second latency.',
-      tags: ['Tableau', 'SQL', 'Apache Kafka'],
-      metric: '2M+ Events/Day',
+      title: 'E-Commerce Web Scraper',
+      description: 'Developed a Python web scraper to collect product data from multiple e-commerce sites. Automated data cleaning and structured storage in CSV/JSON formats.',
+      tags: ['Python', 'BeautifulSoup', 'Selenium'],
+      metric: '5K+ Products',
     },
     {
-      title: 'Customer Churn Prediction',
-      description: 'Developed a churn prediction system that reduced customer attrition by 22% through early intervention strategies.',
-      tags: ['R', 'XGBoost', 'Feature Engineering'],
-      metric: '-22% Churn',
+      title: 'Customer Segmentation Analysis',
+      description: 'Applied clustering algorithms to segment customers based on purchase behavior using Pandas. Created visualizations to identify key customer groups.',
+      tags: ['Python', 'Pandas', 'Scikit-learn'],
+      metric: '4 Segments',
     },
     {
-      title: 'Supply Chain Optimization',
-      description: 'Created an optimization model that reduced logistics costs by $2.4M annually through route and inventory optimization.',
-      tags: ['Python', 'Linear Programming', 'GIS'],
-      metric: '$2.4M Saved',
+      title: 'Weather Data Pipeline on AWS',
+      description: 'Built a cloud-based data pipeline on AWS using S3, Lambda, and Athena to collect, process, and query weather data from public APIs.',
+      tags: ['AWS', 'Lambda', 'S3'],
+      metric: 'Automated',
     },
     {
-      title: 'Healthcare Data Pipeline',
-      description: 'Architected a HIPAA-compliant data pipeline processing patient analytics for a network of 50+ hospitals.',
-      tags: ['Spark', 'AWS', 'HIPAA'],
-      metric: '50+ Hospitals',
+      title: 'Financial Data Analysis in Excel',
+      description: 'Created comprehensive financial analysis workbook with pivot tables, advanced formulas, and dynamic charts for budget tracking and forecasting.',
+      tags: ['Excel', 'Pivot Tables', 'VLOOKUP'],
+      metric: '12 Months Data',
     },
     {
-      title: 'Financial Risk Assessment',
-      description: 'Built a risk assessment framework using Monte Carlo simulations for a leading investment firm.',
-      tags: ['Python', 'Monte Carlo', 'Risk Models'],
-      metric: '99.5% Confidence',
+      title: 'SQL Database Design Project',
+      description: 'Designed and implemented a normalized database schema for a library management system. Wrote complex queries, stored procedures, and views.',
+      tags: ['SQL', 'PostgreSQL', 'Database Design'],
+      metric: '15+ Tables',
     },
   ];
 
@@ -709,45 +768,46 @@ function ProjectsSection() {
   );
 }
 
-// Experience Section with scroll timeline
+// Education & Learning Journey Section
 function ExperienceSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const lineHeight = useTransform(scrollYProgress, [0.1, 0.8], ['0%', '100%']);
 
-  const experiences = [
+  const education = [
     {
-      year: '2022 — Present',
-      role: 'Senior Data Analyst',
-      company: 'TechVault Inc.',
-      description: 'Leading a team of 5 analysts, driving data strategy and building enterprise analytics solutions.',
+      year: '2020 — 2024',
+      role: 'Bachelor of Science in Computer Science',
+      company: 'University of California',
+      description: 'Focused on data structures, algorithms, database systems, and statistical analysis. Completed capstone project on data-driven decision making.',
     },
     {
-      year: '2019 — 2022',
-      role: 'Data Analyst',
-      company: 'DataStream Corp.',
-      description: 'Developed predictive models and automated reporting systems for C-suite executives.',
+      year: '2024',
+      role: 'Google Data Analytics Certificate',
+      company: 'Coursera / Google',
+      description: 'Comprehensive program covering data cleaning, analysis, visualization, and SQL. Completed hands-on case studies with real-world datasets.',
     },
     {
-      year: '2017 — 2019',
-      role: 'Junior Data Analyst',
-      company: 'InsightMetrics',
-      description: 'Built dashboards and performed statistical analysis for marketing and sales teams.',
+      year: '2024',
+      role: 'AWS Cloud Practitioner',
+      company: 'Amazon Web Services',
+      description: 'Certified in AWS cloud concepts, core services, security, architecture, pricing, and support for data analytics workloads.',
     },
     {
-      year: '2016 — 2017',
-      role: 'Data Intern',
-      company: 'Quantum Analytics',
-      description: 'Assisted in data cleaning, ETL processes, and basic visualization projects.',
+      year: '2023 — Present',
+      role: 'Self-Directed Learning',
+      company: 'Online Platforms',
+      description: 'Continuous learning through Udemy, YouTube, and documentation. Built 10+ personal projects applying Python, SQL, Power BI, and cloud services.',
     },
   ];
 
   const certifications = [
     'Google Data Analytics Professional Certificate',
-    'AWS Certified Data Analytics — Specialty',
-    'Tableau Desktop Specialist',
-    'Microsoft Certified: Data Analyst Associate',
+    'AWS Certified Cloud Practitioner',
+    'Microsoft Power BI Data Analyst (PL-300)',
+    'Python for Data Science — IBM',
+    'SQL for Data Analysis — Udacity',
   ];
 
   return (
@@ -761,9 +821,9 @@ function ExperienceSection() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <span className="font-mono text-gold/60 text-sm tracking-[0.3em] uppercase">Journey</span>
+          <span className="font-mono text-gold/60 text-sm tracking-[0.3em] uppercase">Background</span>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-parchment mt-4 retro-text">
-            Experience
+            Education & Certifications
           </h2>
           <div className="section-divider mt-6" />
         </motion.div>
@@ -779,9 +839,9 @@ function ExperienceSection() {
               />
             </div>
 
-            {experiences.map((exp, i) => (
+            {education.map((edu, i) => (
               <motion.div
-                key={exp.year}
+                key={edu.year}
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: '-50px' }}
@@ -796,10 +856,10 @@ function ExperienceSection() {
                 />
                 
                 <div className="bg-ink-light/50 border border-gold/10 p-5 hover:border-gold/30 transition-all duration-300">
-                  <span className="font-mono text-xs text-gold/70">{exp.year}</span>
-                  <h3 className="font-display text-lg font-bold text-parchment mt-1">{exp.role}</h3>
-                  <p className="font-mono text-sm text-gold/80">{exp.company}</p>
-                  <p className="font-body text-sm text-parchment/60 mt-2">{exp.description}</p>
+                  <span className="font-mono text-xs text-gold/70">{edu.year}</span>
+                  <h3 className="font-display text-lg font-bold text-parchment mt-1">{edu.role}</h3>
+                  <p className="font-mono text-sm text-gold/80">{edu.company}</p>
+                  <p className="font-body text-sm text-parchment/60 mt-2">{edu.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -834,14 +894,14 @@ function ExperienceSection() {
               </div>
 
               <div className="mt-8">
-                <h4 className="font-mono text-xs text-gold/60 uppercase tracking-wider mb-4">Tool Proficiency</h4>
+                <h4 className="font-mono text-xs text-gold/60 uppercase tracking-wider mb-4">Skill Proficiency</h4>
                 <ResponsiveContainer width="100%" height={150}>
                   <BarChart data={[
-                    { tool: 'Python', score: 95 },
-                    { tool: 'SQL', score: 92 },
-                    { tool: 'Tableau', score: 88 },
-                    { tool: 'R', score: 85 },
-                    { tool: 'Spark', score: 78 },
+                    { tool: 'Python', score: 85 },
+                    { tool: 'SQL', score: 88 },
+                    { tool: 'Power BI', score: 82 },
+                    { tool: 'Excel', score: 90 },
+                    { tool: 'AWS', score: 70 },
                   ]}>
                     <XAxis dataKey="tool" tick={{ fill: '#e8dcc8', fontSize: 9, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(201, 168, 76, 0.3)' }} />
                     <YAxis tick={{ fill: '#e8dcc8', fontSize: 9, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(201, 168, 76, 0.3)' }} />
@@ -872,8 +932,8 @@ function QuoteSection() {
       <motion.div style={{ y, opacity, scale }} className="relative max-w-4xl mx-auto px-6 text-center">
         <Sparkles className="w-8 h-8 text-gold/50 mx-auto mb-6" />
         <blockquote className="font-display text-2xl md:text-4xl text-parchment/90 italic leading-relaxed retro-text">
-          "Data without analysis is just noise. Analysis without visualization is just numbers. 
-          But together, they tell stories that change the world."
+          "Every dataset has a story waiting to be told. I'm here to learn the language of data 
+          and turn insights into impact — one project at a time."
         </blockquote>
         <div className="mt-8 font-mono text-sm text-gold/60">— Alex Mercer</div>
       </motion.div>
@@ -954,6 +1014,92 @@ function ContactSection() {
                 </motion.a>
               ))}
             </div>
+
+            {/* Download CV Button */}
+            <motion.button
+              onClick={() => {
+                const cvContent = `
+ALEX MERCER
+Aspiring Data Analyst
+
+CONTACT
+Email: alex.mercer@email.com
+Phone: +1 (415) 555-0142
+Location: San Francisco, CA
+LinkedIn: linkedin.com/in/alexmercer
+GitHub: github.com/alexmercer
+
+SUMMARY
+Passionate and detail-oriented aspiring Data Analyst with a strong foundation in Python, SQL, 
+and data visualization. Built 10+ personal projects demonstrating proficiency in data analysis, 
+web scraping, and cloud services. Eager to contribute analytical skills and grow professionally 
+in a data-driven organization.
+
+TECHNICAL SKILLS
+• Programming: Python, SQL
+• Data Analysis: Pandas, NumPy, Web Scraping (BeautifulSoup, Selenium)
+• Visualization: Power BI, Excel (Pivot Tables, Advanced Formulas)
+• Cloud Platforms: AWS (S3, Lambda, Athena), Microsoft Azure
+• Tools: Jupyter Notebook, Git, VS Code
+
+PERSONAL PROJECTS
+1. Sales Dashboard with Power BI
+   - Built interactive dashboard analyzing 10K+ sales records
+   - Implemented DAX calculations and data modeling
+
+2. E-Commerce Web Scraper
+   - Developed Python scraper for product data collection
+   - Automated data cleaning and structured storage
+
+3. Customer Segmentation Analysis
+   - Applied clustering algorithms using Python and Pandas
+   - Created visualizations for customer group identification
+
+4. Weather Data Pipeline on AWS
+   - Built cloud pipeline using S3, Lambda, and Athena
+   - Automated data collection from public APIs
+
+5. Financial Data Analysis in Excel
+   - Created comprehensive workbook with pivot tables
+   - Implemented dynamic charts and forecasting
+
+6. SQL Database Design Project
+   - Designed normalized schema for library management
+   - Wrote complex queries and stored procedures
+
+EDUCATION
+Bachelor of Science in Computer Science
+University of California | 2020 - 2024
+Relevant Coursework: Data Structures, Database Systems, Statistics, Algorithms
+
+CERTIFICATIONS
+• Google Data Analytics Professional Certificate (2024)
+• AWS Certified Cloud Practitioner (2024)
+• Microsoft Power BI Data Analyst - PL-300 (2024)
+• Python for Data Science - IBM (2023)
+• SQL for Data Analysis - Udacity (2023)
+
+LANGUAGES
+• English (Fluent)
+                `;
+                const blob = new Blob([cvContent], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'Alex_Mercer_CV.txt';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+              }}
+              className="w-full py-3 bg-burgundy/20 border-2 border-gold/30 text-gold font-mono font-bold text-sm uppercase tracking-wider hover:bg-gold hover:text-ink transition-all duration-300 flex items-center justify-center gap-2 mt-4"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              data-hover="true"
+            >
+              <Download className="w-4 h-4" />
+              Download My CV
+            </motion.button>
           </motion.div>
 
           <motion.div
@@ -1018,7 +1164,7 @@ function Footer() {
         </p>
         <div className="section-divider mb-4" />
         <p className="font-mono text-xs text-parchment/30 italic">
-          "In data we trust, in insights we believe."
+          "Every line of code is a step forward. Every dataset is a new adventure."
         </p>
       </motion.div>
     </footer>
