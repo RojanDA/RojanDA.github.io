@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  --color-parchment: #e8dcc8;
-  --color-parchment-dark: #d4c4a8;
-  --color-burgundy: #6b1d2e;
-  --color-burgundy-light: #8b2d42;
-  --color-gold: #c9a84c;
-  --color-gold-light: #e0c068;
-  --color-ink: #0d0a07;
-  --color-ink-light: #1a1510;
-  --color-ink-mid: #252018;
-  --color-sepia: #704214;
-  --color-copper: #b87333;
-  --color-forest: #1a3010;
+  --color-parchment: #e8e4dc;
+  --color-parchment-dark: #d4cfc4;
+  --color-burgundy: #4a2c3a;
+  --color-burgundy-light: #6b3d52;
+  --color-gold: #5b7a99;
+  --color-gold-light: #7a9bb8;
+  --color-ink: #0a0d12;
+  --color-ink-light: #141a22;
+  --color-ink-mid: #1c2430;
+  --color-sepia: #3a4a5a;
+  --color-copper: #6a8a9a;
+  --color-forest: #1a3040;
   --color-navy: #0f1a2e;
   --font-display: 'Playfair Display', serif;
   --font-mono: 'Space Mono', monospace;
@@ -58,7 +58,7 @@
   width: 40px;
   height: 40px;
   border-color: var(--color-burgundy-light);
-  background: rgba(201, 168, 76, 0.1);
+  background: rgba(91, 122, 153, 0.1);
 }
 
 /* Grain texture overlay */
@@ -71,7 +71,7 @@
   pointer-events: none;
   z-index: 9000;
   opacity: 0.03;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-image: url("image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
 
 /* Scroll Progress Bar */
@@ -83,7 +83,7 @@
   background: linear-gradient(90deg, var(--color-burgundy), var(--color-gold), var(--color-copper));
   z-index: 9999;
   transform-origin: left;
-  box-shadow: 0 0 10px var(--color-gold), 0 0 20px rgba(201, 168, 76, 0.3);
+  box-shadow: 0 0 10px var(--color-gold), 0 0 20px rgba(91, 122, 153, 0.3);
 }
 
 /* 3D Card Effects */
@@ -101,24 +101,24 @@
 .vintage-border {
   border: 2px solid var(--color-gold);
   box-shadow: 
-    inset 0 0 20px rgba(201, 168, 76, 0.05),
-    0 0 0 1px rgba(201, 168, 76, 0.2),
+    inset 0 0 20px rgba(91, 122, 153, 0.05),
+    0 0 0 1px rgba(91, 122, 153, 0.2),
     0 10px 40px rgba(0, 0, 0, 0.5);
 }
 
 .vintage-border-double {
   border: 3px double var(--color-gold);
   box-shadow: 
-    inset 0 0 30px rgba(201, 168, 76, 0.03),
-    0 0 0 1px rgba(201, 168, 76, 0.15),
+    inset 0 0 30px rgba(91, 122, 153, 0.03),
+    0 0 0 1px rgba(91, 122, 153, 0.15),
     0 15px 50px rgba(0, 0, 0, 0.6);
 }
 
 /* Retro text effects */
 .retro-text {
   text-shadow: 
-    2px 2px 0px rgba(201, 168, 76, 0.2),
-    4px 4px 0px rgba(107, 29, 46, 0.15);
+    2px 2px 0px rgba(91, 122, 153, 0.2),
+    4px 4px 0px rgba(74, 44, 58, 0.15);
 }
 
 .retro-text-shadow {
@@ -198,7 +198,7 @@
 
 /* Glowing effect */
 .glow-gold {
-  box-shadow: 0 0 20px rgba(201, 168, 76, 0.3), 0 0 40px rgba(201, 168, 76, 0.1);
+  box-shadow: 0 0 20px rgba(91, 122, 153, 0.3), 0 0 40px rgba(91, 122, 153, 0.1);
 }
 
 /* 3D floating animation */
@@ -232,16 +232,16 @@
 .paper-texture {
   background-color: var(--color-ink-light);
   background-image: 
-    radial-gradient(ellipse at 20% 50%, rgba(201, 168, 76, 0.03) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(107, 29, 46, 0.02) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 80%, rgba(184, 115, 51, 0.02) 0%, transparent 40%);
+    radial-gradient(ellipse at 20% 50%, rgba(91, 122, 153, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(74, 44, 58, 0.02) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(106, 138, 154, 0.02) 0%, transparent 40%);
 }
 
 /* Retro grid background */
 .retro-grid {
   background-image: 
-    linear-gradient(rgba(201, 168, 76, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(201, 168, 76, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(91, 122, 153, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(91, 122, 153, 0.04) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
@@ -253,7 +253,7 @@ html {
 /* Selection color */
 ::selection {
   background: var(--color-burgundy);
-  color: var(--color-gold);
+  color: var(--color-gold-light);
 }
 
 /* Scroll reveal animations */

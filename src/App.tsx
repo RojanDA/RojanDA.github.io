@@ -562,10 +562,10 @@ function SkillsSection() {
             <h3 className="font-display text-lg text-gold text-center mb-4">Proficiency Map</h3>
             <ResponsiveContainer width="100%" height={250}>
               <RadarChart data={radarData}>
-                <PolarGrid stroke="rgba(201, 168, 76, 0.2)" />
-                <PolarAngleAxis dataKey="skill" tick={{ fill: '#e8dcc8', fontSize: 10, fontFamily: 'Space Mono' }} />
+                <PolarGrid stroke="rgba(91, 122, 153, 0.2)" />
+                <PolarAngleAxis dataKey="skill" tick={{ fill: '#e8e4dc', fontSize: 10, fontFamily: 'Space Mono' }} />
                 <PolarRadiusAxis tick={false} axisLine={false} />
-                <Radar name="Skills" dataKey="value" stroke="#c9a84c" fill="#c9a84c" fillOpacity={0.2} strokeWidth={2} />
+                <Radar name="Skills" dataKey="value" stroke="#5b7a99" fill="#5b7a99" fillOpacity={0.2} strokeWidth={2} />
               </RadarChart>
             </ResponsiveContainer>
           </motion.div>
@@ -583,22 +583,22 @@ function SkillsSection() {
             <AreaChart data={learningData}>
               <defs>
                 <linearGradient id="colorHours" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#c9a84c" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#c9a84c" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#5b7a99" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#5b7a99" stopOpacity={0} />
                 </linearGradient>
                 <linearGradient id="colorProjectsChart" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#6b1d2e" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#6b1d2e" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#2d4a5e" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#2d4a5e" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="month" tick={{ fill: '#e8dcc8', fontSize: 10, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(201, 168, 76, 0.3)' }} />
-              <YAxis tick={{ fill: '#e8dcc8', fontSize: 10, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(201, 168, 76, 0.3)' }} />
+              <XAxis dataKey="month" tick={{ fill: '#e8e4dc', fontSize: 10, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(91, 122, 153, 0.3)' }} />
+              <YAxis tick={{ fill: '#e8e4dc', fontSize: 10, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(91, 122, 153, 0.3)' }} />
               <Tooltip 
-                contentStyle={{ backgroundColor: '#0d0a07', border: '1px solid #c9a84c', borderRadius: 0, fontFamily: 'Space Mono', fontSize: 12 }}
-                labelStyle={{ color: '#c9a84c' }}
+                contentStyle={{ backgroundColor: '#0a0d12', border: '1px solid #5b7a99', borderRadius: 0, fontFamily: 'Space Mono', fontSize: 12 }}
+                labelStyle={{ color: '#5b7a99' }}
               />
-              <Area type="monotone" dataKey="hours" stroke="#c9a84c" fill="url(#colorHours)" strokeWidth={2} name="Learning Hours" />
-              <Area type="monotone" dataKey="projects" stroke="#6b1d2e" fill="url(#colorProjectsChart)" strokeWidth={2} name="Projects" />
+              <Area type="monotone" dataKey="hours" stroke="#5b7a99" fill="url(#colorHours)" strokeWidth={2} name="Learning Hours" />
+              <Area type="monotone" dataKey="projects" stroke="#2d4a5e" fill="url(#colorProjectsChart)" strokeWidth={2} name="Projects" />
             </AreaChart>
           </ResponsiveContainer>
           <div className="flex justify-center gap-8 mt-4">
@@ -903,10 +903,10 @@ function ExperienceSection() {
                     { tool: 'Excel', score: 90 },
                     { tool: 'AWS', score: 70 },
                   ]}>
-                    <XAxis dataKey="tool" tick={{ fill: '#e8dcc8', fontSize: 9, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(201, 168, 76, 0.3)' }} />
-                    <YAxis tick={{ fill: '#e8dcc8', fontSize: 9, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(201, 168, 76, 0.3)' }} />
-                    <Tooltip contentStyle={{ backgroundColor: '#0d0a07', border: '1px solid #c9a84c', borderRadius: 0, fontFamily: 'Space Mono', fontSize: 11 }} />
-                    <Bar dataKey="score" fill="#c9a84c" radius={[2, 2, 0, 0]} />
+                    <XAxis dataKey="tool" tick={{ fill: '#e8e4dc', fontSize: 9, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(91, 122, 153, 0.3)' }} />
+                    <YAxis tick={{ fill: '#e8e4dc', fontSize: 9, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(91, 122, 153, 0.3)' }} />
+                    <Tooltip contentStyle={{ backgroundColor: '#0a0d12', border: '1px solid #5b7a99', borderRadius: 0, fontFamily: 'Space Mono', fontSize: 11 }} />
+                    <Bar dataKey="score" fill="#5b7a99" radius={[2, 2, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
