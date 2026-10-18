@@ -248,6 +248,9 @@
 /* Smooth scroll */
 html {
   scroll-behavior: smooth;
+  /* framer-motion useScroll() measures offsets against html; it warns if the
+     scroll container is position: static. relative keeps its measurement correct. */
+  position: relative;
 }
 
 /* Selection color */

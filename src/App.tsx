@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useInView, useSpring, AnimatePresence } from 'framer-motion';
 import { BarChart3, Database, TrendingUp, Code, Brain, Shield, ChevronDown, Mail, Github, Linkedin, ExternalLink, Award, Briefcase, GraduationCap, MapPin, Phone, ArrowRight, Sparkles, Download, BookOpen, Cloud, Globe, FileSpreadsheet, Server } from 'lucide-react';
 import CustomCursor from './components/CustomCursor';
+import rojanImg from './image/rojan.jpg';
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
 
 // Scroll Progress Bar
@@ -41,7 +42,7 @@ function Navigation() {
           whileHover={{ scale: 1.05 }}
           data-hover="true"
         >
-          A.M.
+          R.P.
         </motion.a>
 
         <div className="hidden md:flex items-center gap-8">
@@ -109,62 +110,6 @@ function HeroSection() {
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
-  const handleDownloadCV = () => {
-    // Create a sample CV content
-    const cvContent = `
-ALEX MERCER
-Data Analyst | Python | SQL | Power BI
-
-CONTACT
-Email: alex.mercer@email.com
-Phone: +1 (415) 555-0142
-Location: San Francisco, CA
-
-SUMMARY
-Aspiring Data Analyst with strong foundation in Python, SQL, and data visualization tools. 
-Passionate about transforming raw data into actionable insights through hands-on personal projects.
-
-SKILLS
-• Programming: Python, SQL
-• Data Analysis: Pandas, NumPy, Web Scraping
-• Visualization: Power BI, Excel
-• Cloud: AWS, Azure
-• Tools: Jupyter, Git
-
-PROJECTS
-1. Sales Data Analysis Dashboard
-   - Built interactive Power BI dashboard analyzing 10K+ sales records
-   - Implemented data cleaning and transformation using Python
-
-2. Weather Data Web Scraper
-   - Developed Python scraper to collect weather data from multiple sources
-   - Automated data collection and storage in structured format
-
-3. Customer Segmentation Analysis
-   - Applied clustering algorithms to segment customers based on purchase behavior
-   - Created visualizations to identify key customer groups
-
-EDUCATION
-Bachelor of Science in Computer Science
-University Name | 2020 - 2024
-
-CERTIFICATIONS
-• Google Data Analytics Certificate
-• AWS Cloud Practitioner
-• Microsoft Power BI Certification
-    `;
-
-    const blob = new Blob([cvContent], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'Alex_Mercer_CV.txt';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
-
   return (
     <section id="hero" ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-ink vignette">
       <div className="absolute inset-0 retro-grid opacity-30" />
@@ -226,8 +171,8 @@ CERTIFICATIONS
             transition={{ duration: 1, delay: 0.3 }}
             className="font-display text-5xl md:text-7xl lg:text-8xl font-black text-parchment mb-6 retro-text leading-tight"
           >
-            Alex
-            <span className="text-gold block md:inline"> Mercer</span>
+            Rojan
+            <span className="text-gold block md:inline"> Poudel</span>
           </motion.h1>
 
           <motion.p
@@ -253,14 +198,15 @@ CERTIFICATIONS
             >
               View My Projects
             </a>
-            <button
-              onClick={handleDownloadCV}
+            <a
+              href="/Rojan_Poudel_CV.pdf"
+              download="Rojan_Poudel_CV.pdf"
               className="px-8 py-3 border-2 border-gold/50 text-gold font-mono font-bold text-sm uppercase tracking-wider hover:border-gold hover:bg-gold/10 transition-all duration-300 flex items-center gap-2"
               data-hover="true"
             >
               <Download className="w-4 h-4" />
               Download CV
-            </button>
+            </a>
           </motion.div>
 
           {/* Stats */}
@@ -363,21 +309,16 @@ function AboutSection() {
             className="card-3d"
           >
             <div className="relative vintage-border-double p-4 bg-ink/80">
-              <div className="aspect-square bg-gradient-to-br from-burgundy/20 via-ink to-navy/20 rounded-sm flex items-center justify-center overflow-hidden">
-                <div className="text-center p-8">
-                  <motion.div
-                    className="w-32 h-32 mx-auto mb-6 rounded-full border-4 border-gold/50 bg-gradient-to-br from-gold/10 to-burgundy/10 flex items-center justify-center"
-                    animate={{ rotate: [0, 5, -5, 0] }}
-                    transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-                  >
-                    <span className="font-display text-5xl font-bold text-gold">AM</span>
-                  </motion.div>
-                  <div className="vintage-stamp mx-auto w-24 h-24 flex items-center justify-center mt-8">
-                    <span className="font-mono text-xs text-burgundy font-bold text-center leading-tight">
-                      EST.<br/>2024<br/>DATA<br/>ANALYST
-                    </span>
-                  </div>
-                </div>
+              <div className="aspect-square bg-gradient-to-br from-burgundy/20 via-ink to-navy/20 rounded-sm overflow-hidden">
+                <motion.img
+                  src={rojanImg}
+                  alt="Rojan Poudel"
+                  className="w-full h-full object-cover"
+                  initial={{ opacity: 0, scale: 1.05 }}
+                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                  transition={{ duration: 1, delay: 0.4 }}
+                  whileHover={{ scale: 1.03 }}
+                />
               </div>
               <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-gold/50" />
               <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-gold/50" />
@@ -469,12 +410,12 @@ function SkillsSection() {
   const chartOpacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 1]);
 
   const radarData = [
-    { skill: 'Python', value: 85 },
-    { skill: 'SQL', value: 88 },
-    { skill: 'Power BI', value: 82 },
-    { skill: 'Excel', value: 90 },
-    { skill: 'AWS', value: 70 },
-    { skill: 'Azure', value: 68 },
+    { skill: 'Python', value: 55 },
+    { skill: 'SQL', value: 58 },
+    { skill: 'Power BI', value: 54 },
+    { skill: 'Excel', value: 59 },
+    { skill: 'AWS', value: 51 },
+    { skill: 'Azure', value: 53 },
   ];
 
   const learningData = [
@@ -488,14 +429,14 @@ function SkillsSection() {
   ];
 
   const skills = [
-    { name: 'Python & Pandas', level: 85, icon: Code },
-    { name: 'SQL & Databases', level: 88, icon: Database },
-    { name: 'Power BI', level: 82, icon: BarChart3 },
-    { name: 'Excel & Data Analysis', level: 90, icon: FileSpreadsheet },
-    { name: 'Web Scraping', level: 78, icon: Globe },
-    { name: 'AWS Cloud', level: 70, icon: Cloud },
-    { name: 'Azure Cloud', level: 68, icon: Server },
-    { name: 'Data Visualization', level: 85, icon: TrendingUp },
+    { name: 'Python & Pandas', level: 55, icon: Code },
+    { name: 'SQL & Databases', level: 58, icon: Database },
+    { name: 'Power BI', level: 54, icon: BarChart3 },
+    { name: 'Excel & Data Analysis', level: 59, icon: FileSpreadsheet },
+    { name: 'Web Scraping', level: 52, icon: Globe },
+    { name: 'AWS Cloud', level: 51, icon: Cloud },
+    { name: 'Azure Cloud', level: 53, icon: Server },
+    { name: 'Data Visualization', level: 56, icon: TrendingUp },
   ];
 
   return (
@@ -841,7 +782,7 @@ function ExperienceSection() {
 
             {education.map((edu, i) => (
               <motion.div
-                key={edu.year}
+                key={`${edu.year}-${i}`}
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: '-50px' }}
@@ -897,11 +838,11 @@ function ExperienceSection() {
                 <h4 className="font-mono text-xs text-gold/60 uppercase tracking-wider mb-4">Skill Proficiency</h4>
                 <ResponsiveContainer width="100%" height={150}>
                   <BarChart data={[
-                    { tool: 'Python', score: 85 },
-                    { tool: 'SQL', score: 88 },
-                    { tool: 'Power BI', score: 82 },
-                    { tool: 'Excel', score: 90 },
-                    { tool: 'AWS', score: 70 },
+                    { tool: 'Python', score: 55 },
+                    { tool: 'SQL', score: 58 },
+                    { tool: 'Power BI', score: 54 },
+                    { tool: 'Excel', score: 59 },
+                    { tool: 'AWS', score: 51 },
                   ]}>
                     <XAxis dataKey="tool" tick={{ fill: '#e8e4dc', fontSize: 9, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(91, 122, 153, 0.3)' }} />
                     <YAxis tick={{ fill: '#e8e4dc', fontSize: 9, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(91, 122, 153, 0.3)' }} />
@@ -935,7 +876,7 @@ function QuoteSection() {
           "Every dataset has a story waiting to be told. I'm here to learn the language of data 
           and turn insights into impact — one project at a time."
         </blockquote>
-        <div className="mt-8 font-mono text-sm text-gold/60">— Alex Mercer</div>
+        <div className="mt-8 font-mono text-sm text-gold/60">— Rojan Poudel</div>
       </motion.div>
     </section>
   );
@@ -976,9 +917,9 @@ function ContactSection() {
 
             <div className="space-y-4">
               {[
-                { icon: Mail, label: 'Email', value: 'alex@mercerdata.com' },
-                { icon: Phone, label: 'Phone', value: '+1 (415) 555-0142' },
-                { icon: MapPin, label: 'Location', value: 'San Francisco, CA' },
+                { icon: Mail, label: 'Email', value: 'chandrarojan21@gmail.com' },
+                { icon: Phone, label: 'Phone', value: '+977 9825396176' },
+                { icon: MapPin, label: 'Location', value: 'urlabari-9, Morang, Nepal' },
               ].map((item, i) => (
                 <motion.div
                   key={item.label}
@@ -1016,82 +957,9 @@ function ContactSection() {
             </div>
 
             {/* Download CV Button */}
-            <motion.button
-              onClick={() => {
-                const cvContent = `
-ALEX MERCER
-Aspiring Data Analyst
-
-CONTACT
-Email: alex.mercer@email.com
-Phone: +1 (415) 555-0142
-Location: San Francisco, CA
-LinkedIn: linkedin.com/in/alexmercer
-GitHub: github.com/alexmercer
-
-SUMMARY
-Passionate and detail-oriented aspiring Data Analyst with a strong foundation in Python, SQL, 
-and data visualization. Built 10+ personal projects demonstrating proficiency in data analysis, 
-web scraping, and cloud services. Eager to contribute analytical skills and grow professionally 
-in a data-driven organization.
-
-TECHNICAL SKILLS
-• Programming: Python, SQL
-• Data Analysis: Pandas, NumPy, Web Scraping (BeautifulSoup, Selenium)
-• Visualization: Power BI, Excel (Pivot Tables, Advanced Formulas)
-• Cloud Platforms: AWS (S3, Lambda, Athena), Microsoft Azure
-• Tools: Jupyter Notebook, Git, VS Code
-
-PERSONAL PROJECTS
-1. Sales Dashboard with Power BI
-   - Built interactive dashboard analyzing 10K+ sales records
-   - Implemented DAX calculations and data modeling
-
-2. E-Commerce Web Scraper
-   - Developed Python scraper for product data collection
-   - Automated data cleaning and structured storage
-
-3. Customer Segmentation Analysis
-   - Applied clustering algorithms using Python and Pandas
-   - Created visualizations for customer group identification
-
-4. Weather Data Pipeline on AWS
-   - Built cloud pipeline using S3, Lambda, and Athena
-   - Automated data collection from public APIs
-
-5. Financial Data Analysis in Excel
-   - Created comprehensive workbook with pivot tables
-   - Implemented dynamic charts and forecasting
-
-6. SQL Database Design Project
-   - Designed normalized schema for library management
-   - Wrote complex queries and stored procedures
-
-EDUCATION
-Bachelor of Science in Computer Science
-University of California | 2020 - 2024
-Relevant Coursework: Data Structures, Database Systems, Statistics, Algorithms
-
-CERTIFICATIONS
-• Google Data Analytics Professional Certificate (2024)
-• AWS Certified Cloud Practitioner (2024)
-• Microsoft Power BI Data Analyst - PL-300 (2024)
-• Python for Data Science - IBM (2023)
-• SQL for Data Analysis - Udacity (2023)
-
-LANGUAGES
-• English (Fluent)
-                `;
-                const blob = new Blob([cvContent], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'Alex_Mercer_CV.txt';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-              }}
+            <motion.a
+              href="/Rojan_Poudel_CV.pdf"
+              download="Rojan_Poudel_CV.pdf"
               className="w-full py-3 bg-burgundy/20 border-2 border-gold/30 text-gold font-mono font-bold text-sm uppercase tracking-wider hover:bg-gold hover:text-ink transition-all duration-300 flex items-center justify-center gap-2 mt-4"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -1099,7 +967,7 @@ LANGUAGES
             >
               <Download className="w-4 h-4" />
               Download My CV
-            </motion.button>
+            </motion.a>
           </motion.div>
 
           <motion.div
@@ -1158,9 +1026,9 @@ function Footer() {
   return (
     <footer ref={ref} className="relative bg-ink border-t border-gold/10 py-12">
       <motion.div style={{ opacity }} className="max-w-7xl mx-auto px-6 text-center">
-        <div className="font-display text-2xl text-gold mb-2 retro-text">A.M.</div>
+        <div className="font-display text-2xl text-gold mb-2 retro-text">R.C.P.</div>
         <p className="font-mono text-xs text-parchment/40 mb-4">
-          © 2024 Alex Mercer. Crafted with precision & passion.
+          © 2024 Rojan Chandra Poudel. Crafted with precision & passion.
         </p>
         <div className="section-divider mb-4" />
         <p className="font-mono text-xs text-parchment/30 italic">
