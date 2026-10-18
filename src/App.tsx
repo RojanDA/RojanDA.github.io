@@ -947,6 +947,7 @@ function ContactSection() {
                 <motion.a
                   key={social.label}
                   href="#"
+                  aria-label={`${social.label} (link coming soon)`}
                   className="w-12 h-12 flex items-center justify-center border border-gold/30 text-gold hover:bg-gold hover:text-ink transition-all duration-300"
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   data-hover="true"
@@ -975,27 +976,49 @@ function ContactSection() {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ delay: 0.4 }}
           >
-            <form className="vintage-border p-8 bg-ink/80 space-y-5">
+            <form
+              className="vintage-border p-8 bg-ink/80 space-y-5"
+              action="mailto:chandrarojan21@gmail.com"
+              method="post"
+              encType="text/plain"
+              noValidate={false}
+            >
               <div>
-                <label className="font-mono text-xs text-gold/70 uppercase tracking-wider block mb-2">Name</label>
+                <label htmlFor="contact-name" className="font-mono text-xs text-gold/70 uppercase tracking-wider block mb-2">Name</label>
                 <input
+                  id="contact-name"
+                  name="name"
                   type="text"
+                  required
+                  minLength={2}
+                  maxLength={100}
+                  autoComplete="name"
                   className="w-full bg-ink-mid/80 border border-gold/20 px-4 py-3 text-parchment font-body text-sm focus:border-gold focus:outline-none transition-colors placeholder:text-parchment/30"
                   placeholder="Your Name"
                 />
               </div>
               <div>
-                <label className="font-mono text-xs text-gold/70 uppercase tracking-wider block mb-2">Email</label>
+                <label htmlFor="contact-email" className="font-mono text-xs text-gold/70 uppercase tracking-wider block mb-2">Email</label>
                 <input
+                  id="contact-email"
+                  name="email"
                   type="email"
+                  required
+                  maxLength={254}
+                  autoComplete="email"
                   className="w-full bg-ink-mid/80 border border-gold/20 px-4 py-3 text-parchment font-body text-sm focus:border-gold focus:outline-none transition-colors placeholder:text-parchment/30"
                   placeholder="your@email.com"
                 />
               </div>
               <div>
-                <label className="font-mono text-xs text-gold/70 uppercase tracking-wider block mb-2">Message</label>
+                <label htmlFor="contact-message" className="font-mono text-xs text-gold/70 uppercase tracking-wider block mb-2">Message</label>
                 <textarea
+                  id="contact-message"
+                  name="message"
                   rows={4}
+                  required
+                  minLength={5}
+                  maxLength={2000}
                   className="w-full bg-ink-mid/80 border border-gold/20 px-4 py-3 text-parchment font-body text-sm focus:border-gold focus:outline-none transition-colors resize-none placeholder:text-parchment/30"
                   placeholder="Tell me about your project..."
                 />

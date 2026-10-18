@@ -4,14 +4,24 @@ import { motion } from 'framer-motion';
 export default function CustomCursor() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const [shouldShow, setShouldShow] = useState(false);
   const trailsRef = useRef<{ x: number; y: number; id: number }[]>([]);
   const [trails, setTrails] = useState<{ x: number; y: number; id: number }[]>([]);
   const trailIdRef = useRef(0);
 
   useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (prefersReducedMotion || !hasFinePointer) {
+      document.documentElement.classList.remove('cursor-hidden');
+      return;
+    }
+
+    document.documentElement.classList.add('cursor-hidden');
+    setShouldShow(true);
+
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({ x: e.clientX, y: e.clientY });
-      
       trailIdRef.current += 1;
       const newTrail = { x: e.clientX, y: e.clientY, id: trailIdRef.current };
       trailsRef.current = [...trailsRef.current.slice(-8), newTrail];
@@ -20,7 +30,20 @@ export default function CustomCursor() {
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.tagName === 'A' || target.tagName === 'BUTTON' || target.closest('a') || target.closest('button') || target.dataset.hover) {
+      if (
+        target.tagName === 'A' ||
+        target.tagName === 'BUTTON' ||
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.tagName === 'SELECT' ||
+        target.tagName === 'LABEL' ||
+        target.closest('a') ||
+        target.closest('button') ||
+        target.closest('input') ||
+        target.closest('textarea') ||
+        target.dataset.hover ||
+        target.classList.contains('cursor-pointer')
+      ) {
         setIsHovering(true);
       } else {
         setIsHovering(false);
@@ -34,6 +57,10 @@ export default function CustomCursor() {
       window.removeEventListener('mouseover', handleMouseOver);
     };
   }, []);
+
+  if (!shouldShow) {
+    return null;
+  }
 
   return (
     <>
@@ -51,7 +78,7 @@ export default function CustomCursor() {
           }}
         />
       ))}
-      
+
       {/* Main cursor ring */}
       <motion.div
         className={`custom-cursor ${isHovering ? 'hovering' : ''}`}
@@ -61,7 +88,7 @@ export default function CustomCursor() {
         }}
         transition={{ type: 'spring', stiffness: 500, damping: 28, mass: 0.5 }}
       />
-      
+
       {/* Cursor dot */}
       <motion.div
         className="cursor-dot"
