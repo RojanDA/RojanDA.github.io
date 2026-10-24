@@ -161,7 +161,7 @@ function HeroSection() {
             className="mb-6"
           >
             <span className="font-mono text-gold/70 text-sm md:text-base tracking-[0.3em] uppercase">
-              ── Aspiring Data Analyst ──
+              ── Data Analyst ──
             </span>
           </motion.div>
 
@@ -181,8 +181,8 @@ function HeroSection() {
             transition={{ duration: 1, delay: 0.6 }}
             className="font-body text-parchment/70 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            Passionate data enthusiast building expertise in Python, SQL, and data visualization. 
-            Transforming personal projects into powerful insights and ready to launch a career in data analytics.
+            Passionate data analyst specializing in e-commerce and retail analytics. 
+            Transforming raw data into business decisions with Excel Power Query, Power Pivot, DAX, Python, SQL, and Tableau.
           </motion.p>
 
           <motion.div
@@ -217,9 +217,9 @@ function HeroSection() {
             className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto"
           >
             {[
-              { number: '10+', label: 'Projects' },
-              { number: '8+', label: 'Skills' },
-              { number: '5+', label: 'Certifications' },
+              { number: '4', label: 'Projects' },
+              { number: '160K+', label: 'Records Analyzed' },
+              { number: '$5.3M', label: 'Sales Analyzed' },
             ].map((stat, i) => (
               <motion.div
                 key={stat.label}
@@ -255,7 +255,7 @@ function MarqueeSection() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const x = useTransform(scrollYProgress, [0, 1], ['0%', '-50%']);
 
-  const items = ['PYTHON', '●', 'SQL', '●', 'POWER BI', '●', 'EXCEL', '●', 'AWS', '●', 'AZURE', '●', 'PANDAS', '●', 'WEB SCRAPING', '●', 'DATA ANALYSIS', '●', 'DATA VISUALIZATION', '●', 'ETL', '●'];
+  const items = ['EXCEL', '●', 'POWER QUERY', '●', 'POWER PIVOT', '●', 'DAX', '●', 'TABLEAU', '●', 'PYTHON', '●', 'PANDAS', '●', 'SQL', '●', 'POSTGRESQL', '●', 'DATA ANALYSIS', '●', 'DASHBOARDS', '●'];
 
   return (
     <section ref={ref} className="relative py-8 bg-ink-mid border-y border-gold/10 overflow-hidden">
@@ -336,27 +336,26 @@ function AboutSection() {
             className="space-y-6"
           >
             <p className="font-body text-parchment/80 text-lg leading-relaxed">
-              A passionate <span className="text-gold font-semibold">aspiring Data Analyst</span> with hands-on 
-              experience through personal projects. I've built a strong foundation in Python, SQL, 
-              and data visualization tools like Power BI and Excel.
+              A <span className="text-gold font-semibold">Data Analyst</span> with hands-on 
+              experience analyzing real business data at scale. I've built end-to-end analytics solutions 
+              using Excel Power Query, Power Pivot, DAX, Tableau, Python, and SQL.
             </p>
             <p className="font-body text-parchment/70 leading-relaxed">
-              Through self-directed learning and real-world projects, I've developed skills in 
-              web scraping, cloud platforms (AWS & Azure), and data manipulation with Pandas. 
-              Every project is an opportunity to solve problems and uncover insights.
+              From 99,000+ e-commerce orders to $5.3M in retail sales, I find the profit leaks, 
+              retention gaps, and pricing opportunities that most businesses miss. I build interactive 
+              dashboards that don't just show numbers — they drive decisions.
             </p>
             <p className="font-body text-parchment/70 leading-relaxed">
-              I'm eager to bring my analytical mindset, technical skills, and enthusiasm 
-              for data to a professional team where I can continue growing and contributing 
-              meaningful insights.
+              Available for freelance projects. I turn your data into your competitive advantage 
+              with clear insights, professional documentation, and dashboards your team can actually use.
             </p>
             
             <div className="grid grid-cols-2 gap-4 pt-4">
               {[
-                { icon: MapPin, text: 'San Francisco, CA' },
-                { icon: Briefcase, text: 'Seeking Opportunities' },
-                { icon: GraduationCap, text: 'B.S. Computer Science' },
-                { icon: Award, text: 'Quick Learner' },
+                { icon: MapPin, text: 'Nepal' },
+                { icon: Briefcase, text: 'Available for Freelance' },
+                { icon: GraduationCap, text: 'Data Analytics Certified' },
+                { icon: Award, text: 'Excel, Python, SQL, Tableau' },
               ].map((item, i) => (
                 <motion.div
                   key={item.text}
@@ -410,12 +409,12 @@ function SkillsSection() {
   const chartOpacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 1]);
 
   const radarData = [
-    { skill: 'Python', value: 55 },
-    { skill: 'SQL', value: 58 },
-    { skill: 'Power BI', value: 54 },
-    { skill: 'Excel', value: 59 },
-    { skill: 'AWS', value: 51 },
-    { skill: 'Azure', value: 53 },
+    { skill: 'Excel', value: 90 },
+    { skill: 'Power Query', value: 85 },
+    { skill: 'DAX / Power Pivot', value: 80 },
+    { skill: 'Tableau', value: 75 },
+    { skill: 'SQL', value: 78 },
+    { skill: 'Python', value: 72 },
   ];
 
   const learningData = [
@@ -606,40 +605,28 @@ function ProjectsSection() {
 
   const projects = [
     {
-      title: 'Sales Dashboard with Power BI',
-      description: 'Built an interactive dashboard analyzing 10K+ sales records with dynamic filters, KPIs, and trend analysis. Implemented data modeling and DAX calculations.',
-      tags: ['Power BI', 'DAX', 'Data Modeling'],
-      metric: '10K+ Records',
+      title: 'Olist E-Commerce Analysis',
+      description: 'Analyzed 99,441 orders across 9 related datasets. Built a 32-sheet workbook with 6 Data Model relationships. Discovered a 3% repeat-purchase rate — a massive retention opportunity.',
+      tags: ['Excel', 'Power Query', 'Data Model'],
+      metric: '99K Orders',
     },
     {
-      title: 'E-Commerce Web Scraper',
-      description: 'Developed a Python web scraper to collect product data from multiple e-commerce sites. Automated data cleaning and structured storage in CSV/JSON formats.',
-      tags: ['Python', 'BeautifulSoup', 'Selenium'],
-      metric: '5K+ Products',
+      title: 'Retail Sales Performance Dashboard',
+      description: 'Interactive dashboard analyzing $5.33M in revenue across 8,888 order lines. Traced $292.8K in profit losses directly to excessive discounting above 40%.',
+      tags: ['Excel', 'PivotTables', 'DAX'],
+      metric: '$5.33M Sales',
     },
     {
-      title: 'Customer Segmentation Analysis',
-      description: 'Applied clustering algorithms to segment customers based on purchase behavior using Pandas. Created visualizations to identify key customer groups.',
-      tags: ['Python', 'Pandas', 'Scikit-learn'],
-      metric: '4 Segments',
+      title: 'AdventureWorks Time-Series Dashboard',
+      description: 'Macro-enabled enterprise dashboard with a star-schema Data Model. Connected 5 dimension tables to a 60,399-row fact table for year-over-year tracking.',
+      tags: ['Power Pivot', 'DAX', 'Macros'],
+      metric: '60K Rows',
     },
     {
-      title: 'Weather Data Pipeline on AWS',
-      description: 'Built a cloud-based data pipeline on AWS using S3, Lambda, and Athena to collect, process, and query weather data from public APIs.',
-      tags: ['AWS', 'Lambda', 'S3'],
-      metric: 'Automated',
-    },
-    {
-      title: 'Financial Data Analysis in Excel',
-      description: 'Created comprehensive financial analysis workbook with pivot tables, advanced formulas, and dynamic charts for budget tracking and forecasting.',
-      tags: ['Excel', 'Pivot Tables', 'VLOOKUP'],
-      metric: '12 Months Data',
-    },
-    {
-      title: 'SQL Database Design Project',
-      description: 'Designed and implemented a normalized database schema for a library management system. Wrote complex queries, stored procedures, and views.',
-      tags: ['SQL', 'PostgreSQL', 'Database Design'],
-      metric: '15+ Tables',
+      title: 'NYC Mobility Analytics',
+      description: 'Business diagnostic on NYC taxi data using Python and PostgreSQL. Cleaned large-scale trip records and built optimized SQL queries to analyze revenue vs. volume trends.',
+      tags: ['Python', 'PostgreSQL', 'SQL'],
+      metric: 'Python + SQL',
     },
   ];
 
