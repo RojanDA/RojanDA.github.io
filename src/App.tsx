@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useInView, useSpring, AnimatePresence } from 'framer-motion';
 import { BarChart3, Database, TrendingUp, Code, Brain, Shield, ChevronDown, Mail, Github, Linkedin, ExternalLink, Award, Briefcase, GraduationCap, MapPin, Phone, ArrowRight, Sparkles, Download, BookOpen, Cloud, Globe, FileSpreadsheet, Server } from 'lucide-react';
 import CustomCursor from './components/CustomCursor';
+import { DataFlowLines, FloatingDataPoints, AnimatedBars, MorphingShape } from './components/MotionGraphics';
 import rojanImg from './image/rojan.jpg';
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
 
@@ -112,6 +113,10 @@ function HeroSection() {
 
   return (
     <section id="hero" ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-ink vignette">
+      <DataFlowLines />
+      <FloatingDataPoints />
+      <AnimatedBars />
+      <MorphingShape />
       <div className="absolute inset-0 retro-grid opacity-30" />
       <div className="absolute inset-0 bg-gradient-to-b from-ink via-transparent to-ink-light" />
       
