@@ -1,10 +1,348 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useInView, useSpring, AnimatePresence } from 'framer-motion';
-import { BarChart3, Database, TrendingUp, Code, Brain, Shield, ChevronDown, Mail, Github, Linkedin, ExternalLink, Award, Briefcase, GraduationCap, MapPin, Phone, ArrowRight, Sparkles, Download, BookOpen, Cloud, Globe, FileSpreadsheet, Server } from 'lucide-react';
+import { BarChart3, Database, TrendingUp, Code, ChevronDown, Mail, Github, Briefcase, MapPin, Phone, ArrowRight, Sparkles, Download, Cloud, FileSpreadsheet, Server, X } from 'lucide-react';
 import CustomCursor from './components/CustomCursor';
 import { DataFlowLines, FloatingDataPoints, AnimatedBars, MorphingShape } from './components/MotionGraphics';
 import rojanImg from './image/rojan.jpg';
-import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
+
+type ProjectImage = {
+  src: string;
+  alt: string;
+  caption?: string;
+};
+
+type Project = {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  tags: string[];
+  metric: string;
+  thumbnail: string;
+  thumbnailAlt: string;
+  overview: string;
+  problem: string;
+  approach: string[];
+  results: { value: string; label: string }[];
+  findings: string[];
+  tools: string[];
+  gallery: ProjectImage[];
+  code?: { label: string; snippet: string };
+};
+
+const jaldimaiProject: Project = {
+  id: 'jaldimai',
+  title: 'Jaldimai Foods — Sales Management System',
+  subtitle: 'Excel · 12-tab system · Damak & Birtamode',
+  description:
+    'Designed a 12-tab Excel sales management system for a two-branch food-delivery business in Damak and Birtamode. Centralized order capture, menu and price masters, branch dashboards, order summaries, and management reports — with KPI views for sales, orders, items sold, AOV, and branch performance.',
+  tags: ['Excel', 'PivotTables', 'Dashboards', 'Data Quality'],
+  metric: '12-Tab System',
+  thumbnail: '/projects/jaldimai-dashboard.png',
+  thumbnailAlt: 'Jaldimai Foods Excel dashboard with branch filters, KPI cards, and monthly sales trends',
+  overview:
+    'A 12-tab Excel system that replaced scattered order logs with one auditable source of truth for a two-branch food-delivery business in Damak and Birtamode, Nepal.',
+  problem:
+    'Orders, menu prices, restaurant details, and branch reporting lived in separate sheets and manual logs. There was no consistent view of sales, order value, or item demand across branches.',
+  approach: [
+    'Built a Sales Entry form that captures branch, restaurant, food, and optional drinks, then writes to a transaction log.',
+    'Added Order_Summary to roll each order up and keep order-level reporting consistent.',
+    'Created a Dashboard with branch and year filters, KPI cards, branch comparison, monthly trend, four-year comparison, and top items.',
+    'Maintained Branch, Restaurant, Menu, and Historical Price master tabs so prices and lookups stayed consistent over time.',
+    'Added Sources and Lists tabs for validation and lookup control.',
+    'Built Reports views and a Home landing page with quick actions and a live snapshot.',
+  ],
+  results: [
+    { value: '12', label: 'Workbook tabs' },
+    { value: '2', label: 'Branches' },
+    { value: '4 yrs', label: 'Demo data' },
+    { value: '199', label: 'Demo orders' },
+  ],
+  findings: [
+    'The dashboard filters by branch and year and surfaces sales, orders, items sold, average order value, branch comparison, and top items.',
+    "Birtamode led the demo snapshot with NPR 103,500 against Damak's NPR 69,560.",
+    'The demo snapshot totals NPR 173,060 in sales across 199 orders and 838 items, with an average order of NPR 869.65.',
+    'The one-click SAVE SALE button is a macro; it can be activated by saving as .xlsm and importing SaveSale.bas.',
+  ],
+  tools: ['Excel', 'PivotTables', 'PivotCharts', 'Slicers', 'Data Validation', 'Macros'],
+  gallery: [
+    {
+      src: '/projects/jaldimai-dashboard.png',
+      alt: 'Jaldimai Foods Excel dashboard showing branch filters, KPI cards, and sales trends',
+      caption: 'Jaldimai Foods dashboard — demo data, 2026.',
+    },
+  ],
+};
+
+const projects: Project[] = [
+  {
+    id: 'emissions',
+    title: 'US Emissions Analytics Dashboard',
+    subtitle: 'Databricks SQL · 2023 EPA data',
+    description:
+      'Built an interactive Databricks SQL dashboard on 2023 EPA emissions data. Queried county- and state-level GHG emissions, calculated emissions per person, ranked the top 10 states and counties, and combined a symbol map, scatter, pie, and bar visuals into one environmental view.',
+    tags: ['Databricks SQL', 'Dashboards', 'Data Visualization', 'SQL'],
+    metric: 'EPA 2023',
+    thumbnail: '/emissions-dashboard.jpg',
+    thumbnailAlt: 'Databricks US emissions dashboard with a symbol map, scatter, pie, and bar chart',
+    overview:
+      'An interactive Databricks SQL dashboard that turns county-level 2023 EPA emissions data into one environmental view. It compares total emissions, population, and emissions per person across states and counties.',
+    problem:
+      'Raw emissions totals favor large, populous states. Without normalizing by population, it is hard to separate a big state from a high-emission-per-person state.',
+    approach: [
+      'Loaded the 2023 EPA county-level emissions dataset into emissions.default.emissions_data.',
+      'Built four SQL datasets: location, emissions per person, total emissions by state, and top counties.',
+      'Calculated emissions per person as total emissions divided by population, using null-safe division.',
+      'Assembled a symbol map, emission-vs-population scatter, state share pie, and state bar chart in one dashboard.',
+      'Ranked the top 10 states and counties by total emissions and by emissions per person.',
+    ],
+    results: [
+      { value: '4', label: 'SQL datasets' },
+      { value: '4', label: 'Visuals' },
+      { value: 'Top 10', label: 'States & counties' },
+      { value: '2023', label: 'EPA data' },
+    ],
+    findings: [
+      'The symbol map shows where emissions concentrate geographically.',
+      'The scatter makes the relationship between population and total emissions visible.',
+      'The per-person measure separates high totals from high emissions intensity.',
+      'The pie and bar charts rank the largest state contributors.',
+    ],
+    tools: ['Databricks SQL', 'Databricks Dashboards', 'SQL', 'Data Visualization', 'EPA data'],
+    gallery: [
+      {
+        src: '/emissions-dashboard.jpg',
+        alt: 'Databricks US emissions dashboard with a symbol map, scatter, pie, and bar chart',
+        caption: 'US Emissions Analytics Dashboard — 2023 EPA data.',
+      },
+    ],
+    code: {
+      label: 'Emissions per person',
+      snippet: `SELECT county_state_name,
+       population,
+       TRY_CAST(REPLACE(\`GHG emissions mtons CO2e\`, ',', '') AS DOUBLE)
+         / NULLIF(population, 0) AS emissions_per_person
+FROM emissions.default.emissions_data
+ORDER BY emissions_per_person DESC;`,
+    },
+  },
+  {
+    id: 'idp',
+    title: 'Document Intelligence Pipeline',
+    subtitle: 'Databricks AI Functions · Unity Catalog',
+    description:
+      'Built a Databricks pipeline that parses invoices, purchase orders, and receipts with ai_parse_document, classifies each document with ai_classify, and extracts vendor, date, and total fields with ai_extract into Unity Catalog tables.',
+    tags: ['Databricks', 'AI Functions', 'Unity Catalog', 'SQL'],
+    metric: '3 Doc Types',
+    thumbnail: '/projects/idp-pipeline.svg',
+    thumbnailAlt: 'Document intelligence pipeline diagram with parse, classify, extract, and Unity Catalog stages',
+    overview:
+      'A document intelligence pipeline that reads mixed finance documents, classifies each one, and extracts structured fields into Unity Catalog tables — without leaving Databricks SQL.',
+    problem:
+      'Invoices, purchase orders, and receipts arrive as unstructured files. Finance teams need vendor, date, and total fields in tables, not PDFs that have to be re-keyed by hand.',
+    approach: [
+      "Read PDFs from a Unity Catalog volume with read_files('/Volumes/idp/default/idpproject').",
+      'Parsed document content with ai_parse_document and flattened the extracted elements into text.',
+      'Classified each document with ai_classify into Invoice, Purchase Order, Receipt, or Other.',
+      'Extracted vendor, invoice number, dates, payment method, and total with ai_extract.',
+      'Wrote governed output tables to idp.finance.invoices, purchase_orders, and receipts.',
+    ],
+    results: [
+      { value: '3', label: 'Document types' },
+      { value: '4', label: 'AI functions' },
+      { value: '3', label: 'Unity Catalog tables' },
+      { value: 'SQL', label: 'End-to-end' },
+    ],
+    findings: [
+      'Classifying before extracting keeps each document type on its own schema.',
+      'AI functions remove manual parsing while keeping the pipeline in SQL.',
+      'Unity Catalog gives the output a governed home for downstream finance reporting.',
+    ],
+    tools: ['Databricks', 'AI Functions', 'Unity Catalog', 'SQL', 'Delta Lake'],
+    gallery: [
+      {
+        src: '/projects/idp-pipeline.svg',
+        alt: 'Document intelligence pipeline diagram with parse, classify, extract, and Unity Catalog stages',
+        caption: 'Five-stage pipeline: read, parse, classify, extract, store.',
+      },
+    ],
+    code: {
+      label: 'Classify + extract',
+      snippet: `CREATE OR REPLACE TABLE classify_data AS
+SELECT *,
+  ai_classify(doc_text, ARRAY('Invoice', 'Purchase Order', 'Receipt', 'Other')) AS doc_classification
+FROM pretty_data;
+
+CREATE OR REPLACE TABLE Invoice_data AS
+SELECT *,
+  ai_extract(doc_text, ARRAY('Vendor_name', 'Invoice_number', 'Invoice_date', 'Due_date', 'Payment_Method', 'Total')) AS extracted
+FROM classify_data
+WHERE doc_classification = 'Invoice';`,
+    },
+  },
+  {
+    id: 'hm',
+    title: 'Retail Lakehouse 360 — H&M Analytics',
+    subtitle: 'PostgreSQL · Bronze → Silver → Gold',
+    description:
+      'Built a bronze–silver–gold PostgreSQL pipeline over 31M+ H&M transaction rows. Designed schemas, cleaned and deduplicated raw data, documented assumptions, and produced analytics-ready gold tables for customer and product analysis.',
+    tags: ['PostgreSQL', 'SQL', 'Data Modeling', 'Data Quality'],
+    metric: '31M+ Rows',
+    thumbnail: '/projects/hm-pipeline.svg',
+    thumbnailAlt: 'Retail Lakehouse 360 bronze, silver, and gold PostgreSQL architecture diagram',
+    overview:
+      'A bronze–silver–gold PostgreSQL pipeline over 31M+ H&M transaction lines. Raw competition files are typed, validated, quarantined, and modeled into analytics-ready gold tables.',
+    problem:
+      'The H&M files mix transaction lines, customers, and articles at different grains. Rebuilding clean tables for every analysis is slow, and silent data-quality issues can distort every downstream metric.',
+    approach: [
+      'Profiled the three source files and documented grain, keys, and data-quality issues before analysis.',
+      'Loaded raw files into a bronze layer, then trimmed IDs, cast dates and prices, and built silver tables.',
+      'Created a quarantine table with explicit reject reasons and reconciled Bronze = Silver + rejected rows.',
+      'Built gold fact and view layers: fact_sales, sales_enriched, customer_rfm, cohort_retention, category_sales, and monthly_channel_sales.',
+      'Reconciled row counts and recorded sales across fact, category, and channel views.',
+    ],
+    results: [
+      { value: '31M+', label: 'Transaction lines' },
+      { value: '3', label: 'Source files' },
+      { value: '5', label: 'Gold views' },
+      { value: '3', label: 'Lakehouse layers' },
+    ],
+    findings: [
+      'Transaction rows are purchase lines, not unique orders — the dataset has no order ID.',
+      'Article and customer IDs must stay as text to preserve leading zeros and long identifiers.',
+      'A quarantine table with reject reasons makes every excluded row auditable.',
+      'Separating bronze, silver, and gold keeps cleaning rules reproducible.',
+    ],
+    tools: ['PostgreSQL', 'SQL', 'Data Modeling', 'Data Quality', 'Bronze/Silver/Gold'],
+    gallery: [
+      {
+        src: '/projects/hm-pipeline.svg',
+        alt: 'Retail Lakehouse 360 bronze, silver, and gold PostgreSQL architecture diagram',
+        caption: 'Bronze → Silver → Gold architecture.',
+      },
+      {
+        src: '/projects/hm-sql-silver.jpg',
+        alt: 'PostgreSQL output from the silver transaction load',
+        caption: 'Silver transaction load.',
+      },
+      {
+        src: '/projects/hm-data-quality.jpg',
+        alt: 'PostgreSQL data-quality check output',
+        caption: 'Data-quality check.',
+      },
+    ],
+    code: {
+      label: 'Bronze → Silver',
+      snippet: `CREATE TABLE silver.transactions AS
+SELECT
+    t_dat::date AS transaction_date,
+    btrim(customer_id) AS customer_id,
+    btrim(article_id) AS article_id,
+    price::numeric AS recorded_price,
+    sales_channel_id::integer AS sales_channel_id
+FROM bronze.transactions_train;
+
+-- Every Bronze row must land in Silver or quarantine
+WITH counts AS (
+    SELECT
+        (SELECT COUNT(*) FROM bronze.transactions_train) AS bronze_rows,
+        (SELECT COUNT(*) FROM silver.transactions) AS silver_rows,
+        (SELECT COUNT(*) FROM silver.transactions_quarantine) AS rejected_rows
+)
+SELECT *,
+       bronze_rows = silver_rows + rejected_rows AS counts_reconcile
+FROM counts;`,
+    },
+  },
+  {
+    id: 'olist',
+    title: 'Olist E-Commerce Analysis',
+    subtitle: 'Excel · Power Query · Data Model',
+    description:
+      'Analyzed 99,441 orders across 9 related datasets. Built a 32-sheet workbook with 6 Data Model relationships. Discovered a 3% repeat-purchase rate — a massive retention opportunity.',
+    tags: ['Excel', 'Power Query', 'Data Model'],
+    metric: '99K Orders',
+    thumbnail: '/projects/olist-dashboard.png',
+    thumbnailAlt: 'Olist executive dashboard with order, delivery, review, and category metrics',
+    overview:
+      'A descriptive analysis of 99,441 Olist marketplace orders, built in Excel with Power Query and a six-relationship Data Model.',
+    problem:
+      'Nine related CSVs at different grains make it easy to double-count orders, items, payments, and reviews. A careless one-to-many join can multiply every KPI.',
+    approach: [
+      "Profiled all nine source files and documented each table's grain and counting rule.",
+      'Built Power Query cleaning layers and a six-relationship Excel Data Model.',
+      'Added nine join-check queries so broken or ambiguous relationships surfaced before any KPI.',
+      'Assembled a 32-sheet workbook and an executive dashboard covering orders, categories, sellers, payments, delivery, and reviews.',
+      'Calculated on-time delivery and repeat-customer share over eligible delivered orders only.',
+    ],
+    results: [
+      { value: '99,441', label: 'Orders' },
+      { value: '91.9%', label: 'On-time delivery' },
+      { value: '4.09/5', label: 'Average review' },
+      { value: '3.0%', label: 'Repeat customers' },
+    ],
+    findings: [
+      '88,644 of 96,470 eligible delivered orders arrived on or before the estimated date — 91.9%.',
+      'The average review score is 4.09 out of 5 across 99,224 records.',
+      'Only 3.0% of delivered customers placed two or more distinct delivered orders.',
+      'Grain discipline matters: payments and orders cannot share a row count without overstating both.',
+    ],
+    tools: ['Excel', 'Power Query', 'Data Model', 'PivotTables', 'PivotCharts'],
+    gallery: [
+      {
+        src: '/projects/olist-dashboard.png',
+        alt: 'Olist executive dashboard with order, delivery, review, and category metrics',
+        caption: 'Olist executive dashboard — 2016–2018 recorded data.',
+      },
+    ],
+  },
+  {
+    id: 'sales',
+    title: 'Retail Sales Performance Dashboard',
+    subtitle: 'Excel · PivotTables · Slicers',
+    description:
+      'Interactive dashboard analyzing $5.33M in revenue across 8,888 order lines. Traced $292.8K in profit losses directly to excessive discounting above 40%.',
+    tags: ['Excel', 'PivotTables', 'DAX'],
+    metric: '$5.33M Sales',
+    thumbnail: '/projects/sales-dashboard.png',
+    thumbnailAlt: 'Retail sales dashboard with KPI cards, regional profit, category, and discount analysis',
+    overview:
+      'A four-year retail sales dashboard covering $5.33M in sales and 8,888 order lines, built to explain what drives profit and what destroys it.',
+    problem:
+      'Sales were growing, but profit was not keeping pace. The business needed to know which regions, categories, and discount levels were helping or hurting margin.',
+    approach: [
+      'Modeled 20 fields across order, customer, geography, and product dimensions.',
+      'Built PivotTables and PivotCharts with category, region, segment, and year slicers.',
+      'Added KPI cards, a Top-10 loss-making products table, and a written findings sheet.',
+      'Tested discount bands against profit to isolate the loss driver.',
+      'Compared regional and category profit contribution against sales contribution.',
+    ],
+    results: [
+      { value: '$5.33M', label: 'Sales' },
+      { value: '$836.6K', label: 'Profit' },
+      { value: '15.70%', label: 'Margin' },
+      { value: '$292.8K', label: 'Lost to >40% discounts' },
+    ],
+    findings: [
+      'West earns 40.5% of profit from 32.3% of sales, at a 19.7% margin.',
+      'Technology earns 75.9% of profit from 50.1% of sales, at a 23.8% margin.',
+      'Central generates 23.7% of sales but only 10.4% of profit.',
+      'Lines discounted above 40% lost $292.8K; Tables lose $84.1K overall but are profitable at 0% discount.',
+    ],
+    tools: ['Excel', 'PivotTables', 'PivotCharts', 'Slicers', 'Calculated Fields'],
+    gallery: [
+      {
+        src: '/projects/sales-dashboard.png',
+        alt: 'Retail sales dashboard with KPI cards, regional profit, category, and discount analysis',
+        caption: 'Sales Performance Dashboard 2018–2021.',
+      },
+    ],
+  },
+];
+
+const featuredProject = projects[0];
+
 
 // Scroll Progress Bar
 function ScrollProgress() {
@@ -186,8 +524,9 @@ function HeroSection() {
             transition={{ duration: 1, delay: 0.6 }}
             className="font-body text-parchment/70 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            Passionate data analyst specializing in e-commerce and retail analytics. 
-            Transforming raw data into business decisions with Excel Power Query, Power Pivot, DAX, Python, SQL, and Tableau.
+            Data Analyst with 3+ years at Jaldimai Foods, turning order, customer, delivery, and
+            partner data into decisions. I build the reports, dashboards, and data models behind
+            the business — with SQL, Python, Excel, Power BI, Tableau, and Databricks.
           </motion.p>
 
           <motion.div
@@ -222,9 +561,9 @@ function HeroSection() {
             className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto"
           >
             {[
-              { number: '4', label: 'Projects' },
-              { number: '160K+', label: 'Records Analyzed' },
-              { number: '$5.3M', label: 'Sales Analyzed' },
+              { number: '3+', label: 'Years Experience' },
+              { number: '50+', label: 'Restaurant Partners' },
+              { number: '31M+', label: 'Records Modeled' },
             ].map((stat, i) => (
               <motion.div
                 key={stat.label}
@@ -260,7 +599,7 @@ function MarqueeSection() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const x = useTransform(scrollYProgress, [0, 1], ['0%', '-50%']);
 
-  const items = ['EXCEL', '●', 'POWER QUERY', '●', 'POWER PIVOT', '●', 'DAX', '●', 'TABLEAU', '●', 'PYTHON', '●', 'PANDAS', '●', 'SQL', '●', 'POSTGRESQL', '●', 'DATA ANALYSIS', '●', 'DASHBOARDS', '●'];
+  const items = ['SQL', '●', 'PYTHON', '●', 'DATABRICKS', '●', 'SPARK', '●', 'UNITY CATALOG', '●', 'DELTA LAKE', '●', 'EXCEL', '●', 'POWER QUERY', '●', 'DAX', '●', 'POWER BI', '●', 'TABLEAU', '●', 'POSTGRESQL', '●', 'DATA ANALYSIS', '●', 'DASHBOARDS', '●'];
 
   return (
     <section ref={ref} className="relative py-8 bg-ink-mid border-y border-gold/10 overflow-hidden">
@@ -341,26 +680,31 @@ function AboutSection() {
             className="space-y-6"
           >
             <p className="font-body text-parchment/80 text-lg leading-relaxed">
-              A <span className="text-gold font-semibold">Data Analyst</span> with hands-on 
-              experience analyzing real business data at scale. I've built end-to-end analytics solutions 
-              using Excel Power Query, Power Pivot, DAX, Tableau, Python, and SQL.
+              I'm a <span className="text-gold font-semibold">Data Analyst</span> based in Urlabari,
+              Morang, with 3+ years at <span className="text-gold font-semibold">Jaldimai Foods</span>,
+              a food-delivery marketplace serving Damak and Birtamode. I've run the operation while
+              building the reporting systems that make it measurable.
             </p>
             <p className="font-body text-parchment/70 leading-relaxed">
-              From 99,000+ e-commerce orders to $5.3M in retail sales, I find the profit leaks, 
-              retention gaps, and pricing opportunities that most businesses miss. I build interactive 
-              dashboards that don't just show numbers — they drive decisions.
+              At Jaldimai, I built a 12-tab Excel sales management system, defined the KPI set
+              (orders, AOV, repeat customers, cancellations, delivery time, and partner ratings),
+              and turned order, customer, restaurant, and rider data into weekly decisions. I also
+              work across SQL, Python, Power BI, Tableau, and Databricks to make that analysis
+              repeatable and scalable.
             </p>
             <p className="font-body text-parchment/70 leading-relaxed">
-              Available for freelance projects. I turn your data into your competitive advantage 
-              with clear insights, professional documentation, and dashboards your team can actually use.
+              My project work includes Databricks dashboards and AI document pipelines, a 31M+ row
+              H&amp;M lakehouse, 99K Olist orders, and $5.3M in retail sales. I look for the profit
+              leaks, retention gaps, and delivery bottlenecks that most businesses miss — then
+              package the findings in dashboards a team can actually use.
             </p>
-            
+
             <div className="grid grid-cols-2 gap-4 pt-4">
               {[
-                { icon: MapPin, text: 'Nepal' },
-                { icon: Briefcase, text: 'Available for Freelance' },
-                { icon: GraduationCap, text: 'Data Analytics Certified' },
-                { icon: Award, text: 'Excel, Python, SQL, Tableau' },
+                { icon: MapPin, text: 'Urlabari, Morang, Nepal' },
+                { icon: Briefcase, text: '3+ Years at Jaldimai Foods' },
+                { icon: Database, text: 'Databricks · SQL · Python' },
+                { icon: BarChart3, text: 'Power BI · Excel · Tableau' },
               ].map((item, i) => (
                 <motion.div
                   key={item.text}
@@ -414,12 +758,12 @@ function SkillsSection() {
   const chartOpacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 1]);
 
   const radarData = [
-    { skill: 'Excel', value: 90 },
-    { skill: 'Power Query', value: 85 },
-    { skill: 'DAX / Power Pivot', value: 80 },
-    { skill: 'Tableau', value: 75 },
-    { skill: 'SQL', value: 78 },
-    { skill: 'Python', value: 72 },
+    { skill: 'Excel', value: 92 },
+    { skill: 'SQL', value: 85 },
+    { skill: 'Python', value: 78 },
+    { skill: 'Databricks', value: 78 },
+    { skill: 'Power BI', value: 80 },
+    { skill: 'Operations', value: 90 },
   ];
 
   const learningData = [
@@ -433,14 +777,14 @@ function SkillsSection() {
   ];
 
   const skills = [
-    { name: 'Python & Pandas', level: 55, icon: Code },
-    { name: 'SQL & Databases', level: 58, icon: Database },
-    { name: 'Power BI', level: 54, icon: BarChart3 },
-    { name: 'Excel & Data Analysis', level: 59, icon: FileSpreadsheet },
-    { name: 'Web Scraping', level: 52, icon: Globe },
-    { name: 'AWS Cloud', level: 51, icon: Cloud },
-    { name: 'Azure Cloud', level: 53, icon: Server },
-    { name: 'Data Visualization', level: 56, icon: TrendingUp },
+    { name: 'SQL & PostgreSQL', level: 85, icon: Database },
+    { name: 'Python & Pandas', level: 78, icon: Code },
+    { name: 'Databricks · Spark · Delta Lake', level: 78, icon: Cloud },
+    { name: 'Excel · Power Query · DAX', level: 92, icon: FileSpreadsheet },
+    { name: 'Power BI', level: 80, icon: BarChart3 },
+    { name: 'Tableau', level: 75, icon: TrendingUp },
+    { name: 'Data Modeling & Data Quality', level: 82, icon: Server },
+    { name: 'Operations & Vendor Management', level: 90, icon: Briefcase },
   ];
 
   return (
@@ -570,10 +914,10 @@ function StatsSection() {
   const bgY = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
   const stats = [
-    { value: 10, suffix: '+', label: 'Personal Projects' },
-    { value: 8, suffix: '+', label: 'Technical Skills' },
-    { value: 500, suffix: '+', label: 'Learning Hours' },
-    { value: 5, suffix: '+', label: 'Certifications' },
+    { value: 3, suffix: '+', label: 'Years Experience' },
+    { value: 50, suffix: '+', label: 'Restaurant Partners' },
+    { value: 31, suffix: 'M+', label: 'Records Modeled' },
+    { value: 6, suffix: '', label: 'Analytics Projects' },
   ];
 
   return (
@@ -602,38 +946,11 @@ function StatsSection() {
 }
 
 // Projects Section with 3D scroll effects
-function ProjectsSection() {
+function ProjectsSection({ onOpenProject }: { onOpenProject: (project: Project) => void }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const titleY = useTransform(scrollYProgress, [0, 0.5], [50, -50]);
-
-  const projects = [
-    {
-      title: 'Olist E-Commerce Analysis',
-      description: 'Analyzed 99,441 orders across 9 related datasets. Built a 32-sheet workbook with 6 Data Model relationships. Discovered a 3% repeat-purchase rate — a massive retention opportunity.',
-      tags: ['Excel', 'Power Query', 'Data Model'],
-      metric: '99K Orders',
-    },
-    {
-      title: 'Retail Sales Performance Dashboard',
-      description: 'Interactive dashboard analyzing $5.33M in revenue across 8,888 order lines. Traced $292.8K in profit losses directly to excessive discounting above 40%.',
-      tags: ['Excel', 'PivotTables', 'DAX'],
-      metric: '$5.33M Sales',
-    },
-    {
-      title: 'AdventureWorks Time-Series Dashboard',
-      description: 'Macro-enabled enterprise dashboard with a star-schema Data Model. Connected 5 dimension tables to a 60,399-row fact table for year-over-year tracking.',
-      tags: ['Power Pivot', 'DAX', 'Macros'],
-      metric: '60K Rows',
-    },
-    {
-      title: 'NYC Mobility Analytics',
-      description: 'Business diagnostic on NYC taxi data using Python and PostgreSQL. Cleaned large-scale trip records and built optimized SQL queries to analyze revenue vs. volume trends.',
-      tags: ['Python', 'PostgreSQL', 'SQL'],
-      metric: 'Python + SQL',
-    },
-  ];
 
   return (
     <section id="projects" ref={ref} className="relative py-24 md:py-32 bg-ink-light paper-texture overflow-hidden">
@@ -654,46 +971,62 @@ function ProjectsSection() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, i) => (
-            <motion.div
-              key={project.title}
+            <motion.article
+              key={project.id}
               initial={{ opacity: 0, y: 60, rotateX: 15 }}
               whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.7, delay: 0.1 + i * 0.1 }}
               whileHover={{ y: -8, scale: 1.02 }}
-              className="card-3d group"
+              className="card-3d group relative"
               data-hover="true"
             >
-              <div className="card-3d-inner h-full bg-ink/80 vintage-border p-6 hover:shadow-2xl hover:shadow-gold/10 transition-all duration-500">
-                <div className="flex justify-between items-start mb-4">
-                  <span className="font-mono text-xs text-gold/50">#{String(i + 1).padStart(2, '0')}</span>
-                  <span className="px-2 py-1 bg-gold/10 border border-gold/30 font-mono text-xs text-gold">
+              <div className="card-3d-inner w-full h-full flex flex-col text-left bg-ink/80 vintage-border hover:shadow-2xl hover:shadow-gold/10 transition-all duration-500">
+                <div className="relative overflow-hidden border-b border-gold/10">
+                  <img
+                    src={project.thumbnail}
+                    alt={project.thumbnailAlt}
+                    loading="lazy"
+                    className="w-full aspect-[16/10] object-cover object-top opacity-80 transition-all duration-500 group-hover:opacity-100 group-hover:scale-[1.03]"
+                  />
+                  <span className="absolute top-3 right-3 px-2 py-1 bg-ink/85 backdrop-blur-sm border border-gold/30 font-mono text-[10px] text-gold">
                     {project.metric}
+                  </span>
+                  <span className="absolute top-3 left-3 px-2 py-1 bg-ink/70 border border-gold/10 font-mono text-[10px] text-parchment/60">
+                    #{String(i + 1).padStart(2, '0')}
                   </span>
                 </div>
 
-                <h3 className="font-display text-xl font-bold text-parchment mb-3 group-hover:text-gold transition-colors">
-                  {project.title}
-                </h3>
+                <div className="p-6 flex flex-col flex-1">
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-gold/60 mb-2">{project.subtitle}</p>
+                  <h3 className="font-display text-xl font-bold text-parchment mb-3 group-hover:text-gold transition-colors">
+                    {project.title}
+                  </h3>
+                  <p className="font-body text-sm text-parchment/60 mb-4 leading-relaxed">
+                    {project.description}
+                  </p>
 
-                <p className="font-body text-sm text-parchment/60 mb-4 leading-relaxed">
-                  {project.description}
-                </p>
+                  <div className="flex flex-wrap gap-2">
+                    {project.tags.map((tag) => (
+                      <span key={tag} className="px-2 py-0.5 bg-burgundy/20 border border-burgundy/30 font-mono text-xs text-parchment/70">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
 
-                <div className="flex flex-wrap gap-2 mt-auto">
-                  {project.tags.map((tag) => (
-                    <span key={tag} className="px-2 py-0.5 bg-burgundy/20 border border-burgundy/30 font-mono text-xs text-parchment/70">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="mt-4 pt-4 border-t border-gold/10 flex justify-between items-center">
-                  <span className="font-mono text-xs text-parchment/40">Case Study</span>
-                  <ExternalLink className="w-4 h-4 text-gold/50 group-hover:text-gold transition-colors" />
+                  <div className="mt-5 pt-4 border-t border-gold/10 flex justify-between items-center">
+                    <span className="font-mono text-[10px] text-gold/70 uppercase tracking-wider">View details</span>
+                    <ArrowRight className="w-4 h-4 text-gold/60 transition-transform duration-300 group-hover:translate-x-1" />
+                  </div>
                 </div>
               </div>
-            </motion.div>
+              <button
+                type="button"
+                onClick={() => onOpenProject(project)}
+                aria-label={`View details for ${project.title}`}
+                className="absolute inset-0 z-10 bg-transparent border-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/70"
+              />
+            </motion.article>
           ))}
         </div>
       </div>
@@ -701,52 +1034,33 @@ function ProjectsSection() {
   );
 }
 
-// Education & Learning Journey Section
-function ExperienceSection() {
+// Experience Section
+function ExperienceSection({ onOpenProject }: { onOpenProject: (project: Project) => void }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const lineHeight = useTransform(scrollYProgress, [0.1, 0.8], ['0%', '100%']);
+  const cardY = useTransform(scrollYProgress, [0, 1], [40, -40]);
 
-  const education = [
-    {
-      year: '2020 — 2024',
-      role: 'Bachelor of Science in Computer Science',
-      company: 'University of California',
-      description: 'Focused on data structures, algorithms, database systems, and statistical analysis. Completed capstone project on data-driven decision making.',
-    },
-    {
-      year: '2024',
-      role: 'Google Data Analytics Certificate',
-      company: 'Coursera / Google',
-      description: 'Comprehensive program covering data cleaning, analysis, visualization, and SQL. Completed hands-on case studies with real-world datasets.',
-    },
-    {
-      year: '2024',
-      role: 'AWS Cloud Practitioner',
-      company: 'Amazon Web Services',
-      description: 'Certified in AWS cloud concepts, core services, security, architecture, pricing, and support for data analytics workloads.',
-    },
-    {
-      year: '2023 — Present',
-      role: 'Self-Directed Learning',
-      company: 'Online Platforms',
-      description: 'Continuous learning through Udemy, YouTube, and documentation. Built 10+ personal projects applying Python, SQL, Power BI, and cloud services.',
-    },
+  const bullets = [
+    'Built and maintained a 12-tab Excel sales management system (Sales Entry, Sales_Data, Order Summary, Dashboard, Reports, and branch/restaurant/menu/price masters) that replaced scattered order logs with one auditable source of truth.',
+    'Defined and reported the core KPI set: orders, sales/GMV, average order value, items per order, repeat customers, cancellation rate, delivery time, on-time delivery, partner ratings, and delivery revenue.',
+    'Analysed order, customer, restaurant, delivery, payment, and review data in SQL and Python to identify peak demand windows, high-delay zones, retention gaps, and underperforming partners — maintaining metric definitions and anonymised datasets so sales, platform revenue, and profit were reported separately.',
+    'Produced weekly and monthly management reports and dashboards; automated recurring reporting and ran data-quality checks for blanks, duplicates, price mismatches, and order-status exceptions.',
+    'Ran daily marketplace operations across Damak and Birtamode — order monitoring, rider allocation, restaurant partner support, delivery escalations, and end-of-day performance reviews — and supported 50+ partners with onboarding, menu and pricing updates, and performance scorecards.',
+    'Analysed delivery pricing and rider coverage against the Rs 20/km, Rs 50 minimum, Rs 300 maximum structure; recommended zone and peak-hour adjustments.',
+    'Turned customer feedback and late-night ordering patterns into menu, promotion, and service recommendations; contributed demand and partner-supply research for the planned Itahari expansion.',
   ];
 
-  const certifications = [
-    'Google Data Analytics Professional Certificate',
-    'AWS Certified Cloud Practitioner',
-    'Microsoft Power BI Data Analyst (PL-300)',
-    'Python for Data Science — IBM',
-    'SQL for Data Analysis — Udacity',
+  const toolkit = [
+    { label: 'Analysis', items: ['SQL', 'Python', 'Pandas', 'Excel', 'Power BI', 'Tableau'] },
+    { label: 'Databricks', items: ['Databricks SQL', 'Spark', 'Unity Catalog', 'Delta Lake', 'AI Functions'] },
+    { label: 'Operations', items: ['KPI reporting', 'Vendor management', 'Data quality', 'Process design'] },
   ];
 
   return (
     <section id="experience" ref={ref} className="relative py-24 md:py-32 bg-ink overflow-hidden">
       <div className="absolute inset-0 retro-grid opacity-10" />
-      
+
       <div className="relative max-w-7xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -754,97 +1068,231 @@ function ExperienceSection() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <span className="font-mono text-gold/60 text-sm tracking-[0.3em] uppercase">Background</span>
+          <span className="font-mono text-gold/60 text-sm tracking-[0.3em] uppercase">Career</span>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-parchment mt-4 retro-text">
-            Education & Certifications
+            Experience
           </h2>
           <div className="section-divider mt-6" />
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Timeline with scroll-driven line */}
-          <div className="relative space-y-0">
-            {/* Animated timeline line */}
-            <div className="absolute left-[7px] top-0 bottom-0 w-0.5 bg-gold/10">
-              <motion.div
-                style={{ height: lineHeight }}
-                className="w-full bg-gradient-to-b from-gold via-gold to-burgundy"
-              />
-            </div>
+        <div className="grid lg:grid-cols-5 gap-10">
+          <motion.div
+            style={{ y: cardY }}
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.7 }}
+            className="lg:col-span-3"
+          >
+            <div className="vintage-border bg-ink-light/70 p-6 md:p-8 h-full">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <span className="font-mono text-xs text-gold/70">2023 — Present · 3 years</span>
+                <span className="px-2 py-0.5 bg-gold/10 border border-gold/30 font-mono text-[10px] uppercase tracking-wider text-gold">
+                  Current Role
+                </span>
+              </div>
+              <h3 className="font-display text-2xl md:text-3xl font-bold text-parchment mt-3">Manager &amp; Data Analyst</h3>
+              <p className="font-mono text-sm text-gold/80 mt-1">Jaldimai Foods — Damak &amp; Birtamode, Jhapa, Nepal</p>
+              <p className="font-body text-sm text-parchment/60 mt-3">
+                Dual role across marketplace operations and business intelligence for a food-delivery
+                platform connecting customers, 50+ restaurant partners, and riders across two service areas.
+              </p>
 
-            {education.map((edu, i) => (
-              <motion.div
-                key={`${edu.year}-${i}`}
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: '-50px' }}
-                transition={{ delay: 0.2 + i * 0.15, duration: 0.6 }}
-                className="relative pl-8 pb-8 last:pb-0 group"
+              <ul className="mt-5 space-y-2.5">
+                {bullets.map((bullet) => (
+                  <li key={bullet} className="flex items-start gap-3">
+                    <span className="mt-2 w-1.5 h-1.5 bg-gold flex-shrink-0" />
+                    <span className="font-body text-sm text-parchment/70 leading-relaxed">{bullet}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-6 grid grid-cols-3 gap-3">
+                {[
+                  { value: '12', label: 'Tab sales system' },
+                  { value: '50+', label: 'Partners supported' },
+                  { value: '2', label: 'Service areas' },
+                ].map((item) => (
+                  <div key={item.label} className="p-3 bg-ink/60 border border-gold/10 text-center">
+                    <div className="font-display text-xl font-bold text-gold">{item.value}</div>
+                    <div className="font-mono text-[10px] text-parchment/50 uppercase tracking-wider mt-1">{item.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap gap-2 mt-6">
+                {['Excel · Power Query · DAX', 'SQL / PostgreSQL', 'Python · Pandas', 'Power BI', 'Tableau', 'Databricks'].map((tool) => (
+                  <span key={tool} className="px-2 py-1 bg-burgundy/20 border border-burgundy/30 font-mono text-xs text-parchment/70">
+                    {tool}
+                  </span>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => onOpenProject(jaldimaiProject)}
+                className="group mt-6 inline-flex items-center gap-3 px-5 py-3 bg-gold/10 border border-gold/40 font-mono text-xs uppercase tracking-wider text-gold hover:bg-gold/20 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/70"
               >
-                <motion.div
-                  className="absolute left-[-5px] top-0 w-3 h-3 bg-gold rounded-full border-2 border-ink"
-                  whileInView={{ scale: [0, 1.5, 1] }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.3 + i * 0.15, duration: 0.4 }}
-                />
-                
-                <div className="bg-ink-light/50 border border-gold/10 p-5 hover:border-gold/30 transition-all duration-300">
-                  <span className="font-mono text-xs text-gold/70">{edu.year}</span>
-                  <h3 className="font-display text-lg font-bold text-parchment mt-1">{edu.role}</h3>
-                  <p className="font-mono text-sm text-gold/80">{edu.company}</p>
-                  <p className="font-body text-sm text-parchment/60 mt-2">{edu.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                View the 12-tab sales system
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </button>
+            </div>
+          </motion.div>
 
-          {/* Certifications */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.5, duration: 0.8 }}
+            transition={{ delay: 0.2, duration: 0.7 }}
+            className="lg:col-span-2 space-y-6"
           >
-            <div className="vintage-border-double p-8 bg-ink/80 h-full">
-              <h3 className="font-display text-xl font-bold text-gold mb-6 flex items-center gap-3">
-                <Award className="w-5 h-5" />
-                Certifications
+            <div className="vintage-border p-6 bg-ink/80">
+              <h3 className="font-display text-lg font-bold text-gold mb-4 flex items-center gap-3">
+                <Briefcase className="w-5 h-5" />
+                What I Owned
+              </h3>
+              <div className="space-y-3 font-body text-sm text-parchment/70">
+                <p><span className="text-gold/80">Reporting &amp; BI —</span> 12-tab Excel system, weekly and monthly dashboards, KPI definitions, and management reports.</p>
+                <p><span className="text-gold/80">Analysis —</span> order, customer, partner, rider, payment, and review data in SQL and Python.</p>
+                <p><span className="text-gold/80">Operations —</span> two service areas, rider allocation, partner support, and delivery escalations.</p>
+                <p><span className="text-gold/80">Data quality —</span> duplicate, blank, price-mismatch, and order-status exception checks.</p>
+                <p><span className="text-gold/80">Planning —</span> demand and partner-supply research for the planned Itahari expansion.</p>
+              </div>
+            </div>
+
+            <div className="vintage-border-double p-6 bg-ink/80">
+              <h3 className="font-display text-lg font-bold text-gold mb-5 flex items-center gap-3">
+                <Database className="w-5 h-5" />
+                Toolkit
               </h3>
               <div className="space-y-4">
-                {certifications.map((cert, i) => (
-                  <motion.div
-                    key={cert}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.7 + i * 0.1 }}
-                    className="flex items-start gap-3 p-3 bg-ink-light/50 border border-gold/10 hover:border-gold/30 transition-colors"
-                  >
-                    <div className="w-2 h-2 bg-gold rounded-full mt-2 flex-shrink-0" />
-                    <span className="font-body text-sm text-parchment/80">{cert}</span>
-                  </motion.div>
+                {toolkit.map((group) => (
+                  <div key={group.label}>
+                    <h4 className="font-mono text-[10px] text-gold/60 uppercase tracking-wider mb-2">{group.label}</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {group.items.map((item) => (
+                        <span key={item} className="px-2 py-1 bg-ink-light/60 border border-gold/10 font-mono text-[10px] text-parchment/70">
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 ))}
-              </div>
-
-              <div className="mt-8">
-                <h4 className="font-mono text-xs text-gold/60 uppercase tracking-wider mb-4">Skill Proficiency</h4>
-                <ResponsiveContainer width="100%" height={150}>
-                  <BarChart data={[
-                    { tool: 'Python', score: 55 },
-                    { tool: 'SQL', score: 58 },
-                    { tool: 'Power BI', score: 54 },
-                    { tool: 'Excel', score: 59 },
-                    { tool: 'AWS', score: 51 },
-                  ]}>
-                    <XAxis dataKey="tool" tick={{ fill: '#e8e4dc', fontSize: 9, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(91, 122, 153, 0.3)' }} />
-                    <YAxis tick={{ fill: '#e8e4dc', fontSize: 9, fontFamily: 'Space Mono' }} axisLine={{ stroke: 'rgba(91, 122, 153, 0.3)' }} />
-                    <Tooltip contentStyle={{ backgroundColor: '#0a0d12', border: '1px solid #5b7a99', borderRadius: 0, fontFamily: 'Space Mono', fontSize: 11 }} />
-                    <Bar dataKey="score" fill="#5b7a99" radius={[2, 2, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
               </div>
             </div>
           </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Featured Databricks Project
+function FeaturedProjectSection({ onOpenProject }: { onOpenProject: (project: Project) => void }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
+
+  const highlights = [
+    'Modeled county-level GHG emissions, population, and geography from the 2023 EPA dataset in Databricks SQL.',
+    'Built four purpose-built datasets: location, emissions per person, total emissions by state, and top counties.',
+    'Combined a symbol map, emission-vs-population scatter, state share pie, and state bar chart in one dashboard.',
+    'Ranked the top 10 states and counties by total emissions and by emissions per person.',
+  ];
+
+  return (
+    <section id="featured" ref={ref} className="relative py-24 md:py-32 bg-ink overflow-hidden">
+      <div className="absolute inset-0 retro-grid opacity-10" />
+
+      <div className="relative max-w-7xl mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-14"
+        >
+          <span className="font-mono text-gold/60 text-sm tracking-[0.3em] uppercase">Featured Project</span>
+          <h2 className="font-display text-4xl md:text-5xl font-bold text-parchment mt-4 retro-text">
+            Databricks in Action
+          </h2>
+          <div className="section-divider mt-6" />
+        </motion.div>
+
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.15 }}
+          >
+            <span className="inline-block px-2 py-1 bg-gold/10 border border-gold/30 font-mono text-[10px] uppercase tracking-wider text-gold mb-4">
+              Databricks SQL · EPA 2023
+            </span>
+            <h3 className="font-display text-3xl md:text-4xl font-bold text-parchment leading-tight">
+              US Emissions Analytics Dashboard
+            </h3>
+            <p className="font-body text-parchment/70 leading-relaxed mt-4">
+              A single environmental view built on county-level EPA emissions data. Four SQL datasets
+              feed a symbol map, scatter, pie, and bar chart so total emissions, population, and
+              emissions per person can be compared without leaving the dashboard.
+            </p>
+
+            <ul className="mt-6 space-y-3">
+              {highlights.map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span className="mt-2 w-1.5 h-1.5 bg-gold flex-shrink-0" />
+                  <span className="font-body text-sm text-parchment/70 leading-relaxed">{item}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="flex flex-wrap gap-2 mt-6">
+              {['Databricks SQL', 'Symbol Map', 'Scatter', 'Pie', 'Bar Chart', 'Data Visualization'].map((tag) => (
+                <span key={tag} className="px-2 py-1 bg-burgundy/20 border border-burgundy/30 font-mono text-xs text-parchment/70">
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-3 gap-3 mt-8">
+              {[
+                { value: '4', label: 'SQL datasets' },
+                { value: '4', label: 'Visuals' },
+                { value: 'Top 10', label: 'States & counties' },
+              ].map((stat) => (
+                <div key={stat.label} className="p-3 bg-ink-light/50 border border-gold/10 text-center">
+                  <div className="font-display text-xl font-bold text-gold">{stat.value}</div>
+                  <div className="font-mono text-[10px] text-parchment/50 uppercase tracking-wider mt-1">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => onOpenProject(featuredProject)}
+              className="group mt-8 inline-flex items-center gap-3 px-5 py-3 bg-gold/10 border border-gold/40 font-mono text-xs uppercase tracking-wider text-gold hover:bg-gold/20 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/70"
+            >
+              Open the full project
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </button>
+          </motion.div>
+
+          <motion.figure
+            initial={{ opacity: 0, x: 40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.25 }}
+            className="vintage-border bg-ink-light/60 p-2 md:p-3"
+          >
+            <img
+              src="/emissions-dashboard.jpg"
+              alt="Databricks US emissions dashboard showing a symbol map, emission-vs-population scatter, state share pie, and emissions bar chart"
+              width={1058}
+              height={674}
+              className="w-full h-auto border border-gold/15"
+              loading="lazy"
+            />
+            <figcaption className="font-mono text-[10px] text-parchment/40 text-center mt-3">
+              US Emissions Analytics Dashboard · Databricks SQL · 2023 EPA data
+            </figcaption>
+          </motion.figure>
         </div>
       </div>
     </section>
@@ -865,8 +1313,8 @@ function QuoteSection() {
       <motion.div style={{ y, opacity, scale }} className="relative max-w-4xl mx-auto px-6 text-center">
         <Sparkles className="w-8 h-8 text-gold/50 mx-auto mb-6" />
         <blockquote className="font-display text-2xl md:text-4xl text-parchment/90 italic leading-relaxed retro-text">
-          "Every dataset has a story waiting to be told. I'm here to learn the language of data 
-          and turn insights into impact — one project at a time."
+          "Good analysis doesn't stop at a chart. It finds the leak, explains the why,
+          and gives the business a decision it can act on."
         </blockquote>
         <div className="mt-8 font-mono text-sm text-gold/60">— Rojan Poudel</div>
       </motion.div>
@@ -903,15 +1351,16 @@ function ContactSection() {
             className="space-y-8"
           >
             <p className="font-body text-parchment/70 text-lg leading-relaxed">
-              Ready to unlock the power of your data? Let's discuss how I can help 
-              transform your analytics strategy and drive measurable results.
+              I'm open to Data Analyst and BI roles where SQL, Python, Excel, Power BI,
+              Tableau, and Databricks turn messy data into decisions. Let's talk about
+              the problems you want solved.
             </p>
 
             <div className="space-y-4">
               {[
                 { icon: Mail, label: 'Email', value: 'chandrarojan21@gmail.com' },
                 { icon: Phone, label: 'Phone', value: '+977 9825396176' },
-                { icon: MapPin, label: 'Location', value: 'urlabari-9, Morang, Nepal' },
+                { icon: MapPin, label: 'Location', value: 'Urlabari-9, Morang, Nepal' },
               ].map((item, i) => (
                 <motion.div
                   key={item.label}
@@ -932,14 +1381,15 @@ function ContactSection() {
 
             <div className="flex gap-4 pt-4">
               {[
-                { icon: Github, label: 'GitHub' },
-                { icon: Linkedin, label: 'LinkedIn' },
-                { icon: Mail, label: 'Email' },
+                { icon: Github, label: 'GitHub', href: 'https://github.com/RojanDA' },
+                { icon: Mail, label: 'Email', href: 'mailto:chandrarojan21@gmail.com' },
               ].map((social) => (
                 <motion.a
                   key={social.label}
-                  href="#"
-                  aria-label={`${social.label} (link coming soon)`}
+                  href={social.href}
+                  target={social.href.startsWith('http') ? '_blank' : undefined}
+                  rel={social.href.startsWith('http') ? 'noreferrer' : undefined}
+                  aria-label={social.label}
                   className="w-12 h-12 flex items-center justify-center border border-gold/30 text-gold hover:bg-gold hover:text-ink transition-all duration-300"
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   data-hover="true"
@@ -1043,19 +1493,194 @@ function Footer() {
       <motion.div style={{ opacity }} className="max-w-7xl mx-auto px-6 text-center">
         <div className="font-display text-2xl text-gold mb-2 retro-text">R.C.P.</div>
         <p className="font-mono text-xs text-parchment/40 mb-4">
-          © 2024 Rojan Chandra Poudel. Crafted with precision & passion.
+          © 2026 Rojan Chandra Poudel. Crafted with precision & passion.
         </p>
         <div className="section-divider mb-4" />
         <p className="font-mono text-xs text-parchment/30 italic">
-          "Every line of code is a step forward. Every dataset is a new adventure."
+          "The goal isn't more dashboards — it's fewer blind decisions."
         </p>
       </motion.div>
     </footer>
   );
 }
 
+// Project Detail Modal
+function ProjectModal({ project, onClose }: { project: Project | null; onClose: () => void }) {
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!project) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    const focusTimer = window.setTimeout(() => closeRef.current?.focus(), 60);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+      window.clearTimeout(focusTimer);
+      previouslyFocused?.focus?.();
+    };
+  }, [project, onClose]);
+
+  return (
+    <AnimatePresence>
+      {project && (
+        <motion.div
+          key={project.id}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[100] overflow-y-auto p-3 md:p-8"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="project-modal-title"
+        >
+          <div
+            className="fixed inset-0 bg-ink/90 backdrop-blur-sm"
+            onClick={onClose}
+            aria-hidden="true"
+          />
+
+          <motion.div
+            initial={{ opacity: 0, y: 40, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.98 }}
+            transition={{ type: 'spring', stiffness: 220, damping: 26 }}
+            className="relative mx-auto my-2 w-full max-w-5xl bg-ink-light vintage-border shadow-2xl shadow-black/60"
+          >
+            <button
+              ref={closeRef}
+              type="button"
+              onClick={onClose}
+              aria-label="Close project details"
+              className="absolute right-4 top-4 z-10 p-2 bg-ink/80 border border-gold/30 text-parchment/70 hover:text-gold hover:border-gold/60 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/70"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="p-6 md:p-10">
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-gold/60">{project.subtitle}</span>
+              <h2 id="project-modal-title" className="font-display text-3xl md:text-4xl font-bold text-parchment mt-3 pr-12">
+                {project.title}
+              </h2>
+              <p className="font-body text-parchment/70 leading-relaxed mt-4">{project.overview}</p>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
+                {project.results.map((result) => (
+                  <div key={result.label} className="p-3 bg-ink/60 border border-gold/10 text-center">
+                    <div className="font-display text-xl font-bold text-gold">{result.value}</div>
+                    <div className="font-mono text-[10px] text-parchment/50 uppercase tracking-wider mt-1">{result.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8 space-y-4">
+                {project.gallery.map((image) => (
+                  <figure key={`${image.src}-${image.alt}`} className="vintage-border bg-ink/60 p-2">
+                    <img
+                      src={image.src}
+                      alt={image.alt}
+                      loading="lazy"
+                      className="w-full h-auto border border-gold/10"
+                    />
+                    {image.caption && (
+                      <figcaption className="font-mono text-[10px] text-parchment/40 text-center mt-2">
+                        {image.caption}
+                      </figcaption>
+                    )}
+                  </figure>
+                ))}
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6 mt-8">
+                <div className="vintage-border p-5 bg-ink/60">
+                  <h3 className="font-mono text-[10px] uppercase tracking-[0.25em] text-gold/70 mb-3">The Problem</h3>
+                  <p className="font-body text-sm text-parchment/70 leading-relaxed">{project.problem}</p>
+                </div>
+                <div className="vintage-border p-5 bg-ink/60">
+                  <h3 className="font-mono text-[10px] uppercase tracking-[0.25em] text-gold/70 mb-3">Tools</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {project.tools.map((tool) => (
+                      <span key={tool} className="px-2 py-1 bg-burgundy/20 border border-burgundy/30 font-mono text-xs text-parchment/70">
+                        {tool}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8">
+                <h3 className="font-mono text-[10px] uppercase tracking-[0.25em] text-gold/70 mb-3">Approach</h3>
+                <ul className="space-y-2.5">
+                  {project.approach.map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <span className="mt-2 w-1.5 h-1.5 bg-gold flex-shrink-0" />
+                      <span className="font-body text-sm text-parchment/70 leading-relaxed">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mt-8">
+                <h3 className="font-mono text-[10px] uppercase tracking-[0.25em] text-gold/70 mb-3">What the data showed</h3>
+                <ul className="space-y-2.5">
+                  {project.findings.map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <span className="mt-2 w-1.5 h-1.5 bg-gold flex-shrink-0" />
+                      <span className="font-body text-sm text-parchment/70 leading-relaxed">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {project.code && (
+                <div className="mt-8">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Code className="w-4 h-4 text-gold/60" />
+                    <h3 className="font-mono text-[10px] uppercase tracking-[0.25em] text-gold/70">{project.code.label}</h3>
+                  </div>
+                  <pre className="overflow-x-auto bg-ink border border-gold/15 p-4 text-xs leading-relaxed">
+                    <code className="font-mono text-parchment/70">{project.code.snippet}</code>
+                  </pre>
+                </div>
+              )}
+
+              <div className="mt-8 pt-6 border-t border-gold/10 flex flex-wrap items-center justify-between gap-4">
+                <div className="flex flex-wrap gap-2">
+                  {project.tags.map((tag) => (
+                    <span key={tag} className="px-2 py-1 bg-burgundy/20 border border-burgundy/30 font-mono text-xs text-parchment/70">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/40 font-mono text-xs uppercase tracking-wider text-gold hover:bg-gold/20 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/70"
+                >
+                  Close
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 // Main App
 export default function App() {
+  const [activeProject, setActiveProject] = useState<Project | null>(null);
+
   return (
     <div className="bg-ink min-h-screen overflow-x-hidden">
       <CustomCursor />
@@ -1067,11 +1692,13 @@ export default function App() {
       <AboutSection />
       <SkillsSection />
       <StatsSection />
-      <ProjectsSection />
+      <ProjectsSection onOpenProject={setActiveProject} />
+      <FeaturedProjectSection onOpenProject={setActiveProject} />
+      <ExperienceSection onOpenProject={setActiveProject} />
       <QuoteSection />
-      <ExperienceSection />
       <ContactSection />
       <Footer />
+      <ProjectModal project={activeProject} onClose={() => setActiveProject(null)} />
     </div>
   );
 }

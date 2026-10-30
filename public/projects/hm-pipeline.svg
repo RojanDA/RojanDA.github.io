@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-labelledby="hmTitle hmDesc">
+  <title id="hmTitle">Retail Lakehouse 360 architecture</title>
+  <desc id="hmDesc">A PostgreSQL bronze, silver, and gold pipeline over 31 million H&amp;M transaction lines, with typed and quarantined silver data feeding gold sales, customer RFM, cohort retention, and category views.</desc>
+  <defs>
+    <marker id="hmArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b7a99"/>
+    </marker>
+    <pattern id="hmGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#5b7a99" stroke-opacity="0.10" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="675" fill="#0a0d12"/>
+  <rect width="1200" height="675" fill="url(#hmGrid)"/>
+  <rect x="24" y="24" width="1152" height="627" fill="none" stroke="#5b7a99" stroke-opacity="0.35" stroke-width="2"/>
+
+  <text x="70" y="92" font-family="'Space Mono', Consolas, monospace" font-size="15" letter-spacing="4" fill="#7a9bb8">POSTGRESQL · LAKEHOUSE</text>
+  <text x="70" y="150" font-family="Georgia, 'Times New Roman', serif" font-size="44" font-weight="700" fill="#e8e4dc">Retail Lakehouse 360</text>
+  <text x="70" y="188" font-family="'Segoe UI', Arial, sans-serif" font-size="18" fill="#a8b3bf">Bronze → Silver → Gold over 31M+ H&amp;M transaction lines.</text>
+
+  <g font-family="'Segoe UI', Arial, sans-serif">
+    <rect x="70" y="238" width="310" height="292" fill="#141a22" stroke="#5b7a99" stroke-width="2"/>
+    <text x="92" y="276" font-family="'Space Mono', Consolas, monospace" font-size="13" letter-spacing="3" fill="#7a9bb8">BRONZE</text>
+    <text x="92" y="310" font-size="22" font-weight="700" fill="#e8e4dc">Raw files</text>
+    <g font-size="14" fill="#a8b3bf">
+      <text x="92" y="348">transactions_train.csv</text>
+      <text x="92" y="376">customers.csv</text>
+      <text x="92" y="404">articles.csv</text>
+    </g>
+    <line x1="92" y1="430" x2="358" y2="430" stroke="#5b7a99" stroke-opacity="0.3"/>
+    <text x="92" y="462" font-size="13" fill="#a8b3bf">Loaded as-is</text>
+    <text x="92" y="486" font-size="13" fill="#a8b3bf">No cleaning applied</text>
+    <text x="92" y="510" font-family="'Space Mono', Consolas, monospace" font-size="12" fill="#7a9bb8">31M+ rows</text>
+
+    <rect x="445" y="238" width="310" height="292" fill="#141a22" stroke="#5b7a99" stroke-width="2"/>
+    <text x="467" y="276" font-family="'Space Mono', Consolas, monospace" font-size="13" letter-spacing="3" fill="#7a9bb8">SILVER</text>
+    <text x="467" y="310" font-size="22" font-weight="700" fill="#e8e4dc">Typed &amp; validated</text>
+    <g font-size="14" fill="#a8b3bf">
+      <text x="467" y="348">Trim IDs, preserve leading zeros</text>
+      <text x="467" y="376">Cast dates and numeric prices</text>
+      <text x="467" y="404">Quarantine rejected rows</text>
+      <text x="467" y="432">Reconcile Bronze = Silver + rejects</text>
+    </g>
+    <line x1="467" y1="458" x2="733" y2="458" stroke="#5b7a99" stroke-opacity="0.3"/>
+    <text x="467" y="490" font-family="'Space Mono', Consolas, monospace" font-size="12" fill="#7a9bb8">silver.transactions</text>
+    <text x="467" y="512" font-family="'Space Mono', Consolas, monospace" font-size="12" fill="#7a9bb8">silver.transactions_quarantine</text>
+
+    <rect x="820" y="238" width="310" height="292" fill="#141a22" stroke="#7a9bb8" stroke-width="2"/>
+    <text x="842" y="276" font-family="'Space Mono', Consolas, monospace" font-size="13" letter-spacing="3" fill="#7a9bb8">GOLD</text>
+    <text x="842" y="310" font-size="22" font-weight="700" fill="#e8e4dc">Analytics-ready</text>
+    <g font-size="14" fill="#a8b3bf">
+      <text x="842" y="348">gold.fact_sales</text>
+      <text x="842" y="376">gold.sales_enriched</text>
+      <text x="842" y="404">gold.customer_rfm</text>
+      <text x="842" y="432">gold.cohort_retention</text>
+      <text x="842" y="460">gold.category_sales</text>
+    </g>
+    <line x1="842" y1="482" x2="1108" y2="482" stroke="#5b7a99" stroke-opacity="0.3"/>
+    <text x="842" y="512" font-size="13" fill="#a8b3bf">Reconciled row counts &amp; sales</text>
+  </g>
+
+  <g stroke="#5b7a99" stroke-width="2" fill="none">
+    <line x1="380" y1="384" x2="437" y2="384" marker-end="url(#hmArrow)"/>
+    <line x1="755" y1="384" x2="812" y2="384" marker-end="url(#hmArrow)"/>
+  </g>
+
+  <g font-family="'Space Mono', Consolas, monospace" font-size="13">
+    <rect x="70" y="566" width="250" height="50" fill="#141a22" stroke="#5b7a99" stroke-opacity="0.7"/>
+    <text x="92" y="597" fill="#e8e4dc">31M+ transaction lines</text>
+    <rect x="340" y="566" width="200" height="50" fill="#141a22" stroke="#5b7a99" stroke-opacity="0.7"/>
+    <text x="362" y="597" fill="#e8e4dc">3 source files</text>
+    <rect x="560" y="566" width="200" height="50" fill="#141a22" stroke="#5b7a99" stroke-opacity="0.7"/>
+    <text x="582" y="597" fill="#e8e4dc">PostgreSQL</text>
+    <rect x="780" y="566" width="350" height="50" fill="#141a22" stroke="#5b7a99" stroke-opacity="0.7"/>
+    <text x="802" y="597" fill="#e8e4dc">RFM · cohort · category views</text>
+  </g>
+</svg>
