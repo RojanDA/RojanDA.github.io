@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, type FormEvent } from 'react';
 import { motion, useScroll, useTransform, useInView, useSpring, AnimatePresence } from 'framer-motion';
 import { BarChart3, Database, TrendingUp, Code, ChevronDown, Mail, Github, Briefcase, MapPin, Phone, ArrowRight, Sparkles, Download, Cloud, FileSpreadsheet, Server, X } from 'lucide-react';
 import CustomCursor from './components/CustomCursor';
@@ -31,65 +31,21 @@ type Project = {
   code?: { label: string; snippet: string };
 };
 
-const jaldimaiProject: Project = {
-  id: 'jaldimai',
-  title: 'Jaldimai Foods — Sales Management System',
-  subtitle: 'Excel · 12-tab system · Damak & Birtamode',
-  description:
-    'Designed a 12-tab Excel sales management system for a two-branch food-delivery business in Damak and Birtamode. Centralized order capture, menu and price masters, branch dashboards, order summaries, and management reports — with KPI views for sales, orders, items sold, AOV, and branch performance.',
-  tags: ['Excel', 'PivotTables', 'Dashboards', 'Data Quality'],
-  metric: '12-Tab System',
-  thumbnail: '/projects/jaldimai-dashboard.png',
-  thumbnailAlt: 'Jaldimai Foods Excel dashboard with branch filters, KPI cards, and monthly sales trends',
-  overview:
-    'A 12-tab Excel system that replaced scattered order logs with one auditable source of truth for a two-branch food-delivery business in Damak and Birtamode, Nepal.',
-  problem:
-    'Orders, menu prices, restaurant details, and branch reporting lived in separate sheets and manual logs. There was no consistent view of sales, order value, or item demand across branches.',
-  approach: [
-    'Built a Sales Entry form that captures branch, restaurant, food, and optional drinks, then writes to a transaction log.',
-    'Added Order_Summary to roll each order up and keep order-level reporting consistent.',
-    'Created a Dashboard with branch and year filters, KPI cards, branch comparison, monthly trend, four-year comparison, and top items.',
-    'Maintained Branch, Restaurant, Menu, and Historical Price master tabs so prices and lookups stayed consistent over time.',
-    'Added Sources and Lists tabs for validation and lookup control.',
-    'Built Reports views and a Home landing page with quick actions and a live snapshot.',
-  ],
-  results: [
-    { value: '12', label: 'Workbook tabs' },
-    { value: '2', label: 'Branches' },
-    { value: '4 yrs', label: 'Demo data' },
-    { value: '199', label: 'Demo orders' },
-  ],
-  findings: [
-    'The dashboard filters by branch and year and surfaces sales, orders, items sold, average order value, branch comparison, and top items.',
-    "Birtamode led the demo snapshot with NPR 103,500 against Damak's NPR 69,560.",
-    'The demo snapshot totals NPR 173,060 in sales across 199 orders and 838 items, with an average order of NPR 869.65.',
-    'The one-click SAVE SALE button is a macro; it can be activated by saving as .xlsm and importing SaveSale.bas.',
-  ],
-  tools: ['Excel', 'PivotTables', 'PivotCharts', 'Slicers', 'Data Validation', 'Macros'],
-  gallery: [
-    {
-      src: '/projects/jaldimai-dashboard.png',
-      alt: 'Jaldimai Foods Excel dashboard showing branch filters, KPI cards, and sales trends',
-      caption: 'Jaldimai Foods dashboard — demo data, 2026.',
-    },
-  ],
-};
-
 const projects: Project[] = [
   {
     id: 'emissions',
     title: 'US Emissions Analytics Dashboard',
     subtitle: 'Databricks SQL · 2023 EPA data',
     description:
-      'Built an interactive Databricks SQL dashboard on 2023 EPA emissions data. Queried county- and state-level GHG emissions, calculated emissions per person, ranked the top 10 states and counties, and combined a symbol map, scatter, pie, and bar visuals into one environmental view.',
+      'I built an interactive Databricks SQL dashboard using 2023 EPA emissions data. It covers county and state greenhouse gas emissions, calculates emissions per person, ranks the top 10 states and counties, and pulls a symbol map, scatter plot, pie chart, and bar chart into one view.',
     tags: ['Databricks SQL', 'Dashboards', 'Data Visualization', 'SQL'],
     metric: 'EPA 2023',
     thumbnail: '/emissions-dashboard.jpg',
     thumbnailAlt: 'Databricks US emissions dashboard with a symbol map, scatter, pie, and bar chart',
     overview:
-      'An interactive Databricks SQL dashboard that turns county-level 2023 EPA emissions data into one environmental view. It compares total emissions, population, and emissions per person across states and counties.',
+      'This Databricks SQL dashboard turns county-level 2023 EPA emissions data into a single environmental view. You can compare total emissions, population, and emissions per person across states and counties.',
     problem:
-      'Raw emissions totals favor large, populous states. Without normalizing by population, it is hard to separate a big state from a high-emission-per-person state.',
+      "Raw emissions totals always favor large, populous states. Without adjusting for population, it's hard to tell a big state apart from one with high emissions per person.",
     approach: [
       'Loaded the 2023 EPA county-level emissions dataset into emissions.default.emissions_data.',
       'Built four SQL datasets: location, emissions per person, total emissions by state, and top counties.',
@@ -114,7 +70,7 @@ const projects: Project[] = [
       {
         src: '/emissions-dashboard.jpg',
         alt: 'Databricks US emissions dashboard with a symbol map, scatter, pie, and bar chart',
-        caption: 'US Emissions Analytics Dashboard — 2023 EPA data.',
+        caption: 'US Emissions Analytics Dashboard, 2023 EPA data.',
       },
     ],
     code: {
@@ -132,13 +88,13 @@ ORDER BY emissions_per_person DESC;`,
     title: 'Document Intelligence Pipeline',
     subtitle: 'Databricks AI Functions · Unity Catalog',
     description:
-      'Built a Databricks pipeline that parses invoices, purchase orders, and receipts with ai_parse_document, classifies each document with ai_classify, and extracts vendor, date, and total fields with ai_extract into Unity Catalog tables.',
+      'I built a Databricks pipeline that reads invoices, purchase orders, and receipts with ai_parse_document, sorts each document with ai_classify, and pulls vendor, date, and total fields into Unity Catalog tables with ai_extract.',
     tags: ['Databricks', 'AI Functions', 'Unity Catalog', 'SQL'],
     metric: '3 Doc Types',
     thumbnail: '/projects/idp-pipeline.svg',
     thumbnailAlt: 'Document intelligence pipeline diagram with parse, classify, extract, and Unity Catalog stages',
     overview:
-      'A document intelligence pipeline that reads mixed finance documents, classifies each one, and extracts structured fields into Unity Catalog tables — without leaving Databricks SQL.',
+      'This document pipeline reads mixed finance documents, classifies each one, and extracts structured fields into Unity Catalog tables, all without leaving Databricks SQL.',
     problem:
       'Invoices, purchase orders, and receipts arrive as unstructured files. Finance teams need vendor, date, and total fields in tables, not PDFs that have to be re-keyed by hand.',
     approach: [
@@ -183,16 +139,16 @@ WHERE doc_classification = 'Invoice';`,
   },
   {
     id: 'hm',
-    title: 'Retail Lakehouse 360 — H&M Analytics',
+    title: 'Retail Lakehouse 360: H&M Analytics',
     subtitle: 'PostgreSQL · Bronze → Silver → Gold',
     description:
-      'Built a bronze–silver–gold PostgreSQL pipeline over 31M+ H&M transaction rows. Designed schemas, cleaned and deduplicated raw data, documented assumptions, and produced analytics-ready gold tables for customer and product analysis.',
+      'I built a bronze, silver, and gold PostgreSQL pipeline over 31M+ H&M transaction rows. I designed the schemas, cleaned and deduplicated the raw data, documented the assumptions, and produced analytics-ready gold tables for customer and product analysis.',
     tags: ['PostgreSQL', 'SQL', 'Data Modeling', 'Data Quality'],
     metric: '31M+ Rows',
     thumbnail: '/projects/hm-pipeline.svg',
     thumbnailAlt: 'Retail Lakehouse 360 bronze, silver, and gold PostgreSQL architecture diagram',
     overview:
-      'A bronze–silver–gold PostgreSQL pipeline over 31M+ H&M transaction lines. Raw competition files are typed, validated, quarantined, and modeled into analytics-ready gold tables.',
+      'A bronze, silver, and gold PostgreSQL pipeline over 31M+ H&M transaction lines. Raw competition files are typed, validated, quarantined, and modeled into analytics-ready gold tables.',
     problem:
       'The H&M files mix transaction lines, customers, and articles at different grains. Rebuilding clean tables for every analysis is slow, and silent data-quality issues can distort every downstream metric.',
     approach: [
@@ -209,7 +165,7 @@ WHERE doc_classification = 'Invoice';`,
       { value: '3', label: 'Lakehouse layers' },
     ],
     findings: [
-      'Transaction rows are purchase lines, not unique orders — the dataset has no order ID.',
+      'Transaction rows are purchase lines, not unique orders. The dataset has no order ID.',
       'Article and customer IDs must stay as text to preserve leading zeros and long identifiers.',
       'A quarantine table with reject reasons makes every excluded row auditable.',
       'Separating bronze, silver, and gold keeps cleaning rules reproducible.',
@@ -260,7 +216,7 @@ FROM counts;`,
     title: 'Olist E-Commerce Analysis',
     subtitle: 'Excel · Power Query · Data Model',
     description:
-      'Analyzed 99,441 orders across 9 related datasets. Built a 32-sheet workbook with 6 Data Model relationships. Discovered a 3% repeat-purchase rate — a massive retention opportunity.',
+      'I analyzed 99,441 orders across nine related datasets and built a 32-sheet workbook with six Data Model relationships. The work surfaced a 3% repeat-purchase rate, which points to a clear retention opportunity.',
     tags: ['Excel', 'Power Query', 'Data Model'],
     metric: '99K Orders',
     thumbnail: '/projects/olist-dashboard.png',
@@ -283,7 +239,7 @@ FROM counts;`,
       { value: '3.0%', label: 'Repeat customers' },
     ],
     findings: [
-      '88,644 of 96,470 eligible delivered orders arrived on or before the estimated date — 91.9%.',
+      '88,644 of 96,470 eligible delivered orders arrived on or before the estimated date, or 91.9%.',
       'The average review score is 4.09 out of 5 across 99,224 records.',
       'Only 3.0% of delivered customers placed two or more distinct delivered orders.',
       'Grain discipline matters: payments and orders cannot share a row count without overstating both.',
@@ -293,7 +249,7 @@ FROM counts;`,
       {
         src: '/projects/olist-dashboard.png',
         alt: 'Olist executive dashboard with order, delivery, review, and category metrics',
-        caption: 'Olist executive dashboard — 2016–2018 recorded data.',
+        caption: 'Olist executive dashboard, 2016 to 2018 recorded data.',
       },
     ],
   },
@@ -302,7 +258,7 @@ FROM counts;`,
     title: 'Retail Sales Performance Dashboard',
     subtitle: 'Excel · PivotTables · Slicers',
     description:
-      'Interactive dashboard analyzing $5.33M in revenue across 8,888 order lines. Traced $292.8K in profit losses directly to excessive discounting above 40%.',
+      'An interactive dashboard covering $5.33M in revenue across 8,888 order lines. It traces $292.8K in profit losses to discounting above 40%.',
     tags: ['Excel', 'PivotTables', 'DAX'],
     metric: '$5.33M Sales',
     thumbnail: '/projects/sales-dashboard.png',
@@ -335,7 +291,7 @@ FROM counts;`,
       {
         src: '/projects/sales-dashboard.png',
         alt: 'Retail sales dashboard with KPI cards, regional profit, category, and discount analysis',
-        caption: 'Sales Performance Dashboard 2018–2021.',
+        caption: 'Sales Performance Dashboard, 2018 to 2021.',
       },
     ],
   },
@@ -524,9 +480,10 @@ function HeroSection() {
             transition={{ duration: 1, delay: 0.6 }}
             className="font-body text-parchment/70 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            Data Analyst with 3+ years at Jaldimai Foods, turning order, customer, delivery, and
-            partner data into decisions. I build the reports, dashboards, and data models behind
-            the business — with SQL, Python, Excel, Power BI, Tableau, and Databricks.
+            I'm a data analyst with more than three years at Jaldimai Foods, where I turn order,
+            customer, delivery, and partner data into everyday decisions. I build the reports,
+            dashboards, and data models behind the business using SQL, Python, Excel, Power BI,
+            Tableau, and Databricks.
           </motion.p>
 
           <motion.div
@@ -680,23 +637,24 @@ function AboutSection() {
             className="space-y-6"
           >
             <p className="font-body text-parchment/80 text-lg leading-relaxed">
-              I'm a <span className="text-gold font-semibold">Data Analyst</span> based in Urlabari,
-              Morang, with 3+ years at <span className="text-gold font-semibold">Jaldimai Foods</span>,
-              a food-delivery marketplace serving Damak and Birtamode. I've run the operation while
-              building the reporting systems that make it measurable.
+              I'm a <span className="text-gold font-semibold">data analyst</span> based in Urlabari,
+              Morang. For the past three years I've worked at
+              <span className="text-gold font-semibold"> Jaldimai Foods</span>, a food-delivery
+              marketplace serving Damak and Birtamode. I've run the operation day to day and built
+              the reporting systems that make it measurable.
             </p>
             <p className="font-body text-parchment/70 leading-relaxed">
-              At Jaldimai, I built a 12-tab Excel sales management system, defined the KPI set
-              (orders, AOV, repeat customers, cancellations, delivery time, and partner ratings),
-              and turned order, customer, restaurant, and rider data into weekly decisions. I also
-              work across SQL, Python, Power BI, Tableau, and Databricks to make that analysis
-              repeatable and scalable.
+              At Jaldimai I built a 12-tab Excel sales system, set the KPI definitions (orders,
+              average order value, repeat customers, cancellations, delivery time, and partner
+              ratings), and used order, customer, restaurant, and rider data to guide weekly
+              decisions. I also work in SQL, Python, Power BI, Tableau, and Databricks so the
+              analysis can be repeated and scaled.
             </p>
             <p className="font-body text-parchment/70 leading-relaxed">
-              My project work includes Databricks dashboards and AI document pipelines, a 31M+ row
-              H&amp;M lakehouse, 99K Olist orders, and $5.3M in retail sales. I look for the profit
-              leaks, retention gaps, and delivery bottlenecks that most businesses miss — then
-              package the findings in dashboards a team can actually use.
+              My project work includes Databricks dashboards, an AI document pipeline, a 31M+ row
+              H&amp;M lakehouse, 99K Olist orders, and $5.3M in retail sales. I look for profit
+              leaks, retention gaps, and delivery bottlenecks that are easy to miss, then put the
+              findings in dashboards a team can actually use.
             </p>
 
             <div className="grid grid-cols-2 gap-4 pt-4">
@@ -1035,20 +993,20 @@ function ProjectsSection({ onOpenProject }: { onOpenProject: (project: Project) 
 }
 
 // Experience Section
-function ExperienceSection({ onOpenProject }: { onOpenProject: (project: Project) => void }) {
+function ExperienceSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const cardY = useTransform(scrollYProgress, [0, 1], [40, -40]);
 
   const bullets = [
-    'Built and maintained a 12-tab Excel sales management system (Sales Entry, Sales_Data, Order Summary, Dashboard, Reports, and branch/restaurant/menu/price masters) that replaced scattered order logs with one auditable source of truth.',
-    'Defined and reported the core KPI set: orders, sales/GMV, average order value, items per order, repeat customers, cancellation rate, delivery time, on-time delivery, partner ratings, and delivery revenue.',
-    'Analysed order, customer, restaurant, delivery, payment, and review data in SQL and Python to identify peak demand windows, high-delay zones, retention gaps, and underperforming partners — maintaining metric definitions and anonymised datasets so sales, platform revenue, and profit were reported separately.',
-    'Produced weekly and monthly management reports and dashboards; automated recurring reporting and ran data-quality checks for blanks, duplicates, price mismatches, and order-status exceptions.',
-    'Ran daily marketplace operations across Damak and Birtamode — order monitoring, rider allocation, restaurant partner support, delivery escalations, and end-of-day performance reviews — and supported 50+ partners with onboarding, menu and pricing updates, and performance scorecards.',
-    'Analysed delivery pricing and rider coverage against the Rs 20/km, Rs 50 minimum, Rs 300 maximum structure; recommended zone and peak-hour adjustments.',
-    'Turned customer feedback and late-night ordering patterns into menu, promotion, and service recommendations; contributed demand and partner-supply research for the planned Itahari expansion.',
+    'Built and maintained a 12-tab Excel sales system (Sales Entry, Sales_Data, Order Summary, Dashboard, Reports, and branch, restaurant, menu, and price masters) that replaced scattered order logs with one auditable source of truth.',
+    'Set and reported the core KPIs: orders, sales/GMV, average order value, items per order, repeat customers, cancellation rate, delivery time, on-time delivery, partner ratings, and delivery revenue.',
+    'Used SQL and Python to analyze order, customer, restaurant, delivery, payment, and review data, looking for peak demand windows, high-delay zones, retention gaps, and underperforming partners. I kept metric definitions and anonymized datasets consistent so sales, platform revenue, and profit were reported separately.',
+    'Produced weekly and monthly management reports and dashboards, automated recurring reporting, and ran data-quality checks for blanks, duplicates, price mismatches, and order-status exceptions.',
+    'Ran daily marketplace operations across Damak and Birtamode, including order monitoring, rider allocation, restaurant partner support, delivery escalations, and end-of-day performance reviews. I also supported 50+ partners with onboarding, menu and pricing updates, and performance scorecards.',
+    'Reviewed delivery pricing and rider coverage against the Rs 20/km, Rs 50 minimum, and Rs 300 maximum structure, then recommended zone and peak-hour adjustments.',
+    'Turned customer feedback and late-night ordering patterns into menu, promotion, and service recommendations, and helped research demand and partner supply for the planned Itahari expansion.',
   ];
 
   const toolkit = [
@@ -1086,13 +1044,13 @@ function ExperienceSection({ onOpenProject }: { onOpenProject: (project: Project
           >
             <div className="vintage-border bg-ink-light/70 p-6 md:p-8 h-full">
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <span className="font-mono text-xs text-gold/70">2023 — Present · 3 years</span>
+                <span className="font-mono text-xs text-gold/70">2023 - Present · 3 years</span>
                 <span className="px-2 py-0.5 bg-gold/10 border border-gold/30 font-mono text-[10px] uppercase tracking-wider text-gold">
                   Current Role
                 </span>
               </div>
               <h3 className="font-display text-2xl md:text-3xl font-bold text-parchment mt-3">Manager &amp; Data Analyst</h3>
-              <p className="font-mono text-sm text-gold/80 mt-1">Jaldimai Foods — Damak &amp; Birtamode, Jhapa, Nepal</p>
+              <p className="font-mono text-sm text-gold/80 mt-1">Jaldimai Foods, Damak &amp; Birtamode, Jhapa, Nepal</p>
               <p className="font-body text-sm text-parchment/60 mt-3">
                 Dual role across marketplace operations and business intelligence for a food-delivery
                 platform connecting customers, 50+ restaurant partners, and riders across two service areas.
@@ -1145,11 +1103,11 @@ function ExperienceSection({ onOpenProject }: { onOpenProject: (project: Project
                 What I Owned
               </h3>
               <div className="space-y-3 font-body text-sm text-parchment/70">
-                <p><span className="text-gold/80">Reporting &amp; BI —</span> 12-tab Excel system, weekly and monthly dashboards, KPI definitions, and management reports.</p>
-                <p><span className="text-gold/80">Analysis —</span> order, customer, partner, rider, payment, and review data in SQL and Python.</p>
-                <p><span className="text-gold/80">Operations —</span> two service areas, rider allocation, partner support, and delivery escalations.</p>
-                <p><span className="text-gold/80">Data quality —</span> duplicate, blank, price-mismatch, and order-status exception checks.</p>
-                <p><span className="text-gold/80">Planning —</span> demand and partner-supply research for the planned Itahari expansion.</p>
+                <p><span className="text-gold/80">Reporting &amp; BI:</span> 12-tab Excel system, weekly and monthly dashboards, KPI definitions, and management reports.</p>
+                <p><span className="text-gold/80">Analysis:</span> order, customer, partner, rider, payment, and review data in SQL and Python.</p>
+                <p><span className="text-gold/80">Operations:</span> two service areas, rider allocation, partner support, and delivery escalations.</p>
+                <p><span className="text-gold/80">Data quality:</span> duplicate, blank, price-mismatch, and order-status exception checks.</p>
+                <p><span className="text-gold/80">Planning:</span> demand and partner-supply research for the planned Itahari expansion.</p>
               </div>
             </div>
 
@@ -1309,16 +1267,128 @@ function QuoteSection() {
           "Good analysis doesn't stop at a chart. It finds the leak, explains the why,
           and gives the business a decision it can act on."
         </blockquote>
-        <div className="mt-8 font-mono text-sm text-gold/60">— Rojan Poudel</div>
+        <div className="mt-8 font-mono text-sm text-gold/60">Rojan Poudel</div>
       </motion.div>
     </section>
   );
+}
+
+// Contact form helpers
+const CONTACT_EMAIL = 'chandrarojan21@gmail.com';
+const CONTACT_ENDPOINT = `https://formsubmit.co/ajax/${encodeURIComponent(CONTACT_EMAIL)}`;
+const CONTACT_RATE_KEY = 'portfolio-contact-submissions';
+const CONTACT_RATE_WINDOW_MS = 60 * 60 * 1000;
+const CONTACT_RATE_LIMIT = 3;
+const CONTACT_MIN_FILL_MS = 3000;
+
+type ContactStatus = 'idle' | 'submitting' | 'success' | 'error';
+
+function cleanContactText(value: string, maxLength: number) {
+  return value
+    .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, maxLength);
+}
+
+function isValidContactEmail(value: string) {
+  return value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+}
+
+function recentContactSubmissions() {
+  try {
+    const raw = window.localStorage.getItem(CONTACT_RATE_KEY);
+    const parsed: unknown = raw ? JSON.parse(raw) : [];
+    if (!Array.isArray(parsed)) return [];
+    const cutoff = Date.now() - CONTACT_RATE_WINDOW_MS;
+    return parsed.filter((item): item is number => typeof item === 'number' && item > cutoff);
+  } catch {
+    return [];
+  }
 }
 
 // Contact Section
 function ContactSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [company, setCompany] = useState('');
+  const [status, setStatus] = useState<ContactStatus>('idle');
+  const [feedback, setFeedback] = useState('');
+  const formStartedAt = useRef(Date.now());
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (status === 'submitting') return;
+
+    const cleanName = cleanContactText(name, 100);
+    const cleanEmail = cleanContactText(email, 254).toLowerCase();
+    const cleanMessage = cleanContactText(message, 2000);
+
+    // Honeypot and time trap: real visitors leave these alone.
+    if (company || Date.now() - formStartedAt.current < CONTACT_MIN_FILL_MS) {
+      setStatus('error');
+      setFeedback('Something went wrong. Please try again.');
+      return;
+    }
+    if (cleanName.length < 2) {
+      setStatus('error');
+      setFeedback('Please enter your name.');
+      return;
+    }
+    if (!isValidContactEmail(cleanEmail)) {
+      setStatus('error');
+      setFeedback('Please enter a valid email address.');
+      return;
+    }
+    if (cleanMessage.length < 5) {
+      setStatus('error');
+      setFeedback('Please add a short message.');
+      return;
+    }
+
+    const recent = recentContactSubmissions();
+    if (recent.length >= CONTACT_RATE_LIMIT) {
+      setStatus('error');
+      setFeedback('Too many messages in a short time. Please try again later.');
+      return;
+    }
+
+    setStatus('submitting');
+    setFeedback('Sending your message...');
+
+    try {
+      const response = await fetch(CONTACT_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        referrerPolicy: 'strict-origin-when-cross-origin',
+        body: JSON.stringify({
+          name: cleanName,
+          email: cleanEmail,
+          message: cleanMessage,
+          _subject: `Portfolio message from ${cleanName}`,
+          _template: 'table',
+          _captcha: 'false',
+        }),
+      });
+
+      if (!response.ok) throw new Error(`Contact request failed: ${response.status}`);
+
+      window.localStorage.setItem(CONTACT_RATE_KEY, JSON.stringify([...recent, Date.now()]));
+      setName('');
+      setEmail('');
+      setMessage('');
+      setCompany('');
+      formStartedAt.current = Date.now();
+      setStatus('success');
+      setFeedback('Thanks. Your message has been sent.');
+    } catch {
+      setStatus('error');
+      setFeedback(`I couldn't send that just now. Please email me at ${CONTACT_EMAIL}.`);
+    }
+  };
 
   return (
     <section id="contact" ref={ref} className="relative py-24 md:py-32 bg-ink-light paper-texture overflow-hidden">
@@ -1413,10 +1483,8 @@ function ContactSection() {
           >
             <form
               className="vintage-border p-8 bg-ink/80 space-y-5"
-              action="mailto:chandrarojan21@gmail.com"
-              method="post"
-              encType="text/plain"
-              noValidate={false}
+              onSubmit={handleSubmit}
+              noValidate
             >
               <div>
                 <label htmlFor="contact-name" className="font-mono text-xs text-gold/70 uppercase tracking-wider block mb-2">Name</label>
@@ -1428,6 +1496,8 @@ function ContactSection() {
                   minLength={2}
                   maxLength={100}
                   autoComplete="name"
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
                   className="w-full bg-ink-mid/80 border border-gold/20 px-4 py-3 text-parchment font-body text-sm focus:border-gold focus:outline-none transition-colors placeholder:text-parchment/30"
                   placeholder="Your Name"
                 />
@@ -1441,6 +1511,10 @@ function ContactSection() {
                   required
                   maxLength={254}
                   autoComplete="email"
+                  inputMode="email"
+                  spellCheck={false}
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
                   className="w-full bg-ink-mid/80 border border-gold/20 px-4 py-3 text-parchment font-body text-sm focus:border-gold focus:outline-none transition-colors placeholder:text-parchment/30"
                   placeholder="your@email.com"
                 />
@@ -1454,19 +1528,53 @@ function ContactSection() {
                   required
                   minLength={5}
                   maxLength={2000}
+                  value={message}
+                  onChange={(event) => setMessage(event.target.value)}
                   className="w-full bg-ink-mid/80 border border-gold/20 px-4 py-3 text-parchment font-body text-sm focus:border-gold focus:outline-none transition-colors resize-none placeholder:text-parchment/30"
                   placeholder="Tell me about your project..."
                 />
               </div>
+
+              {/* Honeypot: hidden from people, tempting to bots. */}
+              <div className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+                <label htmlFor="contact-company">Company</label>
+                <input
+                  id="contact-company"
+                  name="company"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={company}
+                  onChange={(event) => setCompany(event.target.value)}
+                />
+              </div>
+
+              {feedback && (
+                <p
+                  id="contact-form-status"
+                  role="status"
+                  aria-live="polite"
+                  className={`font-body text-xs leading-relaxed ${status === 'success' ? 'text-gold' : 'text-parchment/70'}`}
+                >
+                  {feedback}
+                </p>
+              )}
+
               <motion.button
                 type="submit"
-                className="w-full py-3 bg-gold text-ink font-mono font-bold text-sm uppercase tracking-wider hover:bg-gold-light transition-all duration-300 glow-gold flex items-center justify-center gap-2"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                disabled={status === 'submitting'}
+                className="w-full py-3 bg-gold text-ink font-mono font-bold text-sm uppercase tracking-wider hover:bg-gold-light transition-all duration-300 glow-gold flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-60"
+                whileHover={status === 'submitting' ? undefined : { scale: 1.02 }}
+                whileTap={status === 'submitting' ? undefined : { scale: 0.98 }}
                 data-hover="true"
               >
-                Send Message <ArrowRight className="w-4 h-4" />
+                {status === 'submitting' ? 'Sending...' : 'Send Message'}
+                <ArrowRight className="w-4 h-4" />
               </motion.button>
+
+              <p className="font-mono text-[10px] text-parchment/35 leading-relaxed">
+                Your name, email, and message are sent over HTTPS and used only to reply.
+              </p>
             </form>
           </motion.div>
         </div>
@@ -1490,7 +1598,7 @@ function Footer() {
         </p>
         <div className="section-divider mb-4" />
         <p className="font-mono text-xs text-parchment/30 italic">
-          "The goal isn't more dashboards — it's fewer blind decisions."
+          "The goal isn't more dashboards. It's fewer blind decisions."
         </p>
       </motion.div>
     </footer>
@@ -1687,7 +1795,7 @@ export default function App() {
       <StatsSection />
       <ProjectsSection onOpenProject={setActiveProject} />
       <FeaturedProjectSection onOpenProject={setActiveProject} />
-      <ExperienceSection onOpenProject={setActiveProject} />
+      <ExperienceSection />
       <QuoteSection />
       <ContactSection />
       <Footer />
