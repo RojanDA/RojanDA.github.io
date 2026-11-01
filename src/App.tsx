@@ -1128,14 +1128,7 @@ function ExperienceSection({ onOpenProject }: { onOpenProject: (project: Project
                 ))}
               </div>
 
-              <button
-                type="button"
-                onClick={() => onOpenProject(jaldimaiProject)}
-                className="group mt-6 inline-flex items-center gap-3 px-5 py-3 bg-gold/10 border border-gold/40 font-mono text-xs uppercase tracking-wider text-gold hover:bg-gold/20 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/70"
-              >
-                View the 12-tab sales system
-                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </button>
+
             </div>
           </motion.div>
 
