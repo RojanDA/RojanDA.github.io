@@ -1573,7 +1573,7 @@ function ContactSection() {
               </motion.button>
 
               <p className="font-mono text-[10px] text-parchment/35 leading-relaxed">
-                Your name, email, and message are sent over HTTPS and used only to reply.
+                Your details are sent over HTTPS to a form service and used only to reply.
               </p>
             </form>
           </motion.div>
